@@ -21,8 +21,6 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.henshin.interpreter.util.HashList;
-
 
 /**
  * This constraint checks whether the value of an EReference contains 
@@ -181,7 +179,7 @@ public class ReferenceConstraint implements BinaryConstraint {
 					target.temporaryDomain = Collections.emptyList();
 				}
 			} else {
-				target.temporaryDomain = new HashList<EObject>(targetObjects);
+				target.temporaryDomain = new ArrayList<EObject>(targetObjects);
 			}
 			if (change.originalValues!=null) {
 				target.temporaryDomain.retainAll(change.originalValues);
