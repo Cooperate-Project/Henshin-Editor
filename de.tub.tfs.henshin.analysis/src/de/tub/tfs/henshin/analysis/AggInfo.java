@@ -10,6 +10,7 @@
  *******************************************************************************/
 package de.tub.tfs.henshin.analysis;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import java.util.Vector;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -33,8 +35,9 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.henshin.interpreter.util.ModelHelper;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.emf.henshin.model.And;
 import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.BinaryFormula;
@@ -995,11 +998,22 @@ public class AggInfo {
 		system.getUnits().add(EcoreUtil.copy(criticalPair.getRule2()));
 		//system.getInstances().add(criticalPair.getOverlapping());
 		
-		ModelHelper.saveFile(criticalPair.getType().getLiteral() + "(" + criticalPair.getRule1().getName() + "_and_" + criticalPair.getRule2().getName() + "_id:" + criticalPair.hashCode() + ").henshin", system);
+		saveFile(criticalPair.getType().getLiteral() + "(" + criticalPair.getRule1().getName() + "_and_" + criticalPair.getRule2().getName() + "_id:" + criticalPair.hashCode() + ").henshin", system);
 		
 	}
 	
 	
+	private static void saveFile(String filename, EObject  root) {
+		Resource resource = new XMLResourceImpl(URI.createFileURI(filename));
+		resource.getContents().add(root);
+		try {
+			resource.save(null);
+		} catch (IOException e) {
+		}
+		
+	}
+
+
 	public void registerAdditionalAttribute(EAttribute attr,String value,Node target){
 		Type aggType = nodeTypeMap.get(target.getType());
 		String dataType = EcoreUtil.toJavaInstanceTypeName(attr.getEGenericType());

@@ -155,7 +155,7 @@ public interface TggPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TGG__NULL_VALUE_MATCHING = HenshinPackage.MODULE__NULL_VALUE_MATCHING;
+//	int TGG__NULL_VALUE_MATCHING = HenshinPackage.MODULE__NULL_VALUE_MATCHING;
 
 	/**
 	 * The feature id for the '<em><b>Srcroot</b></em>' reference.
@@ -1056,7 +1056,7 @@ public interface TggPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TGG_RULE__IS_USED = HenshinPackage.RULE__IS_USED;
+//	int TGG_RULE__IS_USED = HenshinPackage.RULE__IS_USED;
 
 	/**
 	 * The feature id for the '<em><b>Lhs</b></em>' containment reference.

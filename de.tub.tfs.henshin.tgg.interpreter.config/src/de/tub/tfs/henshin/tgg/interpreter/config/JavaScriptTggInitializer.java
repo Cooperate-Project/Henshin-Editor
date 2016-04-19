@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 
 import javax.script.ScriptEngine;
 
+
 import org.eclipse.core.runtime.Platform;
 
 public class JavaScriptTggInitializer {

@@ -10,10 +10,14 @@
  *******************************************************************************/
 package de.tub.tfs.henshin.analysis.sandbox;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.henshin.interpreter.util.ModelHelper;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.henshin.model.Module;
 import org.eclipse.emf.henshin.model.impl.HenshinPackageImpl;
+import org.eclipse.emf.henshin.model.resource.HenshinResourceSet;
 
 import de.tub.tfs.henshin.analysis.AggInfo;
 
@@ -25,38 +29,43 @@ public class AggConvert {
 	public static void main(String[] args) {
 		HenshinPackageImpl.init();
 		
-		ModelHelper.registerFileExtension("henshin");
-		ModelHelper.registerFileExtension("ecore");
+		HenshinResourceSet rs = new HenshinResourceSet();
+		rs.registerXMIResourceFactories("henshin", "ecore");
 		
-		EPackage sierpinskiPackage = (EPackage) ModelHelper.loadFile("tests/sierpinski.ecore");
+		EPackage sierpinskiPackage = (EPackage) loadFile("tests/sierpinski.ecore");
 		EPackage.Registry.INSTANCE.put(sierpinskiPackage.getNsURI(), sierpinskiPackage);
 		
-		EPackage statechartPackage = (EPackage) ModelHelper.loadFile("tests/statechart.ecore");
+		EPackage statechartPackage = (EPackage) loadFile("tests/statechart.ecore");
 		EPackage.Registry.INSTANCE.put(statechartPackage.getNsURI(), statechartPackage);
 		
-		EPackage ooPackage = (EPackage) ModelHelper.loadFile("tests/OO.ecore");
+		EPackage ooPackage = (EPackage) loadFile("tests/OO.ecore");
 		EPackage.Registry.INSTANCE.put(ooPackage.getNsURI(), ooPackage);
 		
-		EPackage oo2rdbPackage = (EPackage) ModelHelper.loadFile("tests/OO2RDB.ecore");
+		EPackage oo2rdbPackage = (EPackage) loadFile("tests/OO2RDB.ecore");
 		EPackage.Registry.INSTANCE.put(oo2rdbPackage.getNsURI(), oo2rdbPackage);
 		
-		EPackage rdbPackage = (EPackage) ModelHelper.loadFile("tests/RDB.ecore");
+		EPackage rdbPackage = (EPackage) loadFile("tests/RDB.ecore");
 		EPackage.Registry.INSTANCE.put(rdbPackage.getNsURI(), rdbPackage);
 		
 		// the most simple henshin example
-		Module ts = (Module) ModelHelper
-				.loadFile("tests/sierpinski.henshin");
+		Module ts = (Module) loadFile("tests/sierpinski.henshin");
 		AggInfo aggInfo = new AggInfo(ts);
 		aggInfo.getAggGrammar().save("tests/sierpinski.ggx");
 		
 		// the most complex henshin example
-		ts = (Module) ModelHelper.loadFile("tests/statechart.henshin");
+		ts = (Module) loadFile("tests/statechart.henshin");
 		aggInfo = new AggInfo(ts);
 		aggInfo.getAggGrammar().save("tests/statechart.ggx");
 		
-		ts = (Module) ModelHelper.loadFile("tests/final.henshin");
+		ts = (Module) loadFile("tests/final.henshin");
 		aggInfo = new AggInfo(ts);
 		aggInfo.getAggGrammar().save("tests/final.ggx");
+	}
+
+	private static EObject loadFile(String filename) {
+		ResourceSet resourceSet = new HenshinResourceSet();
+		Resource resource = resourceSet.getResource(URI.createFileURI(filename), true);
+		return resource.getContents().get(0);
 	}
 	
 }

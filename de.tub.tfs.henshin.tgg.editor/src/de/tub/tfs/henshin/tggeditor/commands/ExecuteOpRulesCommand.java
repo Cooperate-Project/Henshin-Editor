@@ -124,7 +124,7 @@ public class ExecuteOpRulesCommand extends CompoundCommand {
 		tggTrafo.setInput(henshinGraph);
 
 		Module module = TggUtil.getModuleFromElement(graph);
-		tggTrafo.setNullValueMatching(module.isNullValueMatching());
+//		tggTrafo.setNullValueMatching(module.isNullValueMatching());
 		tggTrafo.setOpRuleList(opRuleList);
 
 		// execute the transformation

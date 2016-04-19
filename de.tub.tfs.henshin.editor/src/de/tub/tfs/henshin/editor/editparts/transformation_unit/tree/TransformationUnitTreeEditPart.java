@@ -97,9 +97,9 @@ public class TransformationUnitTreeEditPart<T extends Unit>
 	@Override
 	protected String getText() {
 		String text=getCastedModel().getName();
-		if(getCastedModel().isIsUsed()) {
-			text="[Used] " + text;
-		}
+//		if(getCastedModel().isIsUsed()) {
+//			text="[Used] " + text;
+//		}
 		return text;
 	}
 
@@ -123,11 +123,11 @@ public class TransformationUnitTreeEditPart<T extends Unit>
 	protected void updateIsUsedFlag() {
 		// update the flag for isUsedByOtherUnit
 		List<Unit> list = TransformationUnitUtil.getSubUnits(getCastedModel());
-		for(Unit u:list){
-				if(!u.isIsUsed()){
-					u.setIsUsed(true);
-			}
-		}	
+//		for(Unit u:list){
+//				if(!u.isIsUsed()){
+//					u.setIsUsed(true);
+//			}
+//		}	
 		
 	}
 
@@ -142,11 +142,11 @@ public class TransformationUnitTreeEditPart<T extends Unit>
 	protected void notifyChanged(Notification notification) {
 
 		final int featureId = notification.getFeatureID(HenshinPackage.class);
-		switch (featureId) {
-		case HenshinPackage.UNIT__IS_USED:
-			refreshVisuals();
-			break;
-		}
+//		switch (featureId) {
+//		case HenshinPackage.UNIT__IS_USED:
+//			refreshVisuals();
+//			break;
+//		}
 
 		
 		final int type = notification.getEventType();

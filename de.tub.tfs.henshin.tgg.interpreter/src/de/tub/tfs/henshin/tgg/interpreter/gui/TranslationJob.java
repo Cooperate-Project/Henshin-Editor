@@ -282,8 +282,8 @@ public class TranslationJob extends Job {
 					// execute all modules once
 					for (int modulePos=0;modulePos<modules.size();modulePos++) {
 						tggTransformation.setOpRuleList(opRules.get(modulePos));
-						tggTransformation.setNullValueMatching(modules.get(modulePos)
-								.isNullValueMatching());
+//						tggTransformation.setNullValueMatching(modules.get(modulePos)
+//								.isNullValueMatching());
 
 						String trFileName = fileNames.get(modulePos);
 						monitor.subTask("Applying " + trFileName );
@@ -303,8 +303,8 @@ public class TranslationJob extends Job {
 
 
 							tggTransformation.setOpRuleList(opRules.get(i));
-							tggTransformation.setNullValueMatching(modules.get(i)
-									.isNullValueMatching());
+//							tggTransformation.setNullValueMatching(modules.get(i)
+//									.isNullValueMatching());
 
 							trFileName = fileNames.get(i);
 							monitor.subTask("Applying " + trFileName );
