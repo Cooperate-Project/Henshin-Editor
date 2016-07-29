@@ -19,10 +19,10 @@ import org.eclipse.emf.henshin.model.Edge;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.tub.tfs.henshin.tgg.TEdge#getMarkerType <em>Marker Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.tub.tfs.henshin.tgg.TggPackage#getTEdge()
  * @model

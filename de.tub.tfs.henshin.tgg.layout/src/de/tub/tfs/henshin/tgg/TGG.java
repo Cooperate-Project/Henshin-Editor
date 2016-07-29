@@ -23,6 +23,7 @@ import org.eclipse.emf.henshin.model.Module;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.tub.tfs.henshin.tgg.TGG#getSrcroot <em>Srcroot</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TGG#getTarroot <em>Tarroot</em>}</li>
@@ -39,7 +40,6 @@ import org.eclipse.emf.henshin.model.Module;
  *   <li>{@link de.tub.tfs.henshin.tgg.TGG#getTargetPkgs <em>Target Pkgs</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TGG#getImportedPkgs <em>Imported Pkgs</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.tub.tfs.henshin.tgg.TggPackage#getTGG()
  * @model

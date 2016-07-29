@@ -25,6 +25,7 @@ import org.eclipse.emf.henshin.model.Rule;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.tub.tfs.henshin.tgg.CritPair#getOverlapping <em>Overlapping</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.CritPair#getRule1 <em>Rule1</em>}</li>
@@ -34,7 +35,6 @@ import org.eclipse.emf.henshin.model.Rule;
  *   <li>{@link de.tub.tfs.henshin.tgg.CritPair#getMappingsRule1ToRule2 <em>Mappings Rule1 To Rule2</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.CritPair#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.tub.tfs.henshin.tgg.TggPackage#getCritPair()
  * @model

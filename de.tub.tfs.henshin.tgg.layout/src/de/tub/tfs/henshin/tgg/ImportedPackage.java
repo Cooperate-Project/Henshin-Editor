@@ -20,12 +20,12 @@ import org.eclipse.emf.ecore.EPackage;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.tub.tfs.henshin.tgg.ImportedPackage#isLoadWithDefaultValues <em>Load With Default Values</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.ImportedPackage#getPackage <em>Package</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.ImportedPackage#getComponent <em>Component</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.tub.tfs.henshin.tgg.TggPackage#getImportedPackage()
  * @model

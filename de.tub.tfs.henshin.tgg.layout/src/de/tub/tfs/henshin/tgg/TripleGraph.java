@@ -19,13 +19,13 @@ import org.eclipse.emf.henshin.model.Graph;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.tub.tfs.henshin.tgg.TripleGraph#getDividerSC_X <em>Divider SC X</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TripleGraph#getDividerCT_X <em>Divider CT X</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TripleGraph#getDividerMaxY <em>Divider Max Y</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TripleGraph#getDividerYOffset <em>Divider YOffset</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.tub.tfs.henshin.tgg.TggPackage#getTripleGraph()
  * @model

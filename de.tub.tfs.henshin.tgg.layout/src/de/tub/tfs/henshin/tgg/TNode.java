@@ -19,13 +19,13 @@ import org.eclipse.emf.henshin.model.Node;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.tub.tfs.henshin.tgg.TNode#getX <em>X</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TNode#getY <em>Y</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TNode#getComponent <em>Component</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TNode#getMarkerType <em>Marker Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.tub.tfs.henshin.tgg.TggPackage#getTNode()
  * @model

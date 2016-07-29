@@ -19,12 +19,12 @@ import org.eclipse.emf.henshin.model.Rule;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link de.tub.tfs.henshin.tgg.TGGRule#getIsMarked <em>Is Marked</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TGGRule#isManualMatchingOrder <em>Manual Matching Order</em>}</li>
  *   <li>{@link de.tub.tfs.henshin.tgg.TGGRule#getMarkerType <em>Marker Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see de.tub.tfs.henshin.tgg.TggPackage#getTGGRule()
  * @model
