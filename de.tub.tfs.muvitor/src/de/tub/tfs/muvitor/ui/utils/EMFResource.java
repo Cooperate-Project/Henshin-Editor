@@ -11,21 +11,10 @@
 package de.tub.tfs.muvitor.ui.utils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.zip.ZipEntry;
 
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
@@ -36,14 +25,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EPackageRegistryImpl;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.BinaryIO.Version;
-import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectInputStream;
-import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStream;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.emf.ecore.xmi.DOMHandler;
-import org.eclipse.emf.ecore.xmi.DOMHelper;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLHelper;
 import org.eclipse.emf.ecore.xmi.XMLLoad;
@@ -56,9 +38,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMISaveImpl;
 import org.eclipse.emf.ecore.xml.type.AnyType;
 import org.eclipse.swt.widgets.Display;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class EMFResource extends XMIResourceImpl {
@@ -159,15 +138,18 @@ public class EMFResource extends XMIResourceImpl {
 	}
 
 	@Override
-	public void load(Map options) throws IOException {
+	public void load(Map<?,?> options) throws IOException {
 		loadTime = true;
 		try {
 		FragmentResource fragmentResource = this.emfModelManager.getFragmentResource(this);
 		if (fragmentResource != null){
 			fragmentResource.cleanUp();
 		}
-		options.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
-		super.load(options);
+		Map<Object, Object> loadOptions = new HashMap<Object, Object>();
+		loadOptions.putAll(options);
+		loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+
+		super.load(loadOptions);
 		XMIResource r = (XMIResource) this;
 		if (!r.getEObjectToExtensionMap().isEmpty()){
 			for (Entry<EObject, AnyType> missingReference : r.getEObjectToExtensionMap().entrySet()) {
