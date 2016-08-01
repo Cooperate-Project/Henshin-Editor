@@ -26,11 +26,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.henshin.interpreter.impl.EGraphImpl;
-import org.eclipse.emf.henshin.interpreter.util.HenshinEGraph;
 import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.Edge;
 import org.eclipse.emf.henshin.model.Graph;
-import org.eclipse.emf.henshin.model.HenshinFactory;
 import org.eclipse.emf.henshin.model.Node;
 
 import de.tub.tfs.henshin.tgg.TggFactory;
@@ -181,15 +179,12 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.emf.henshin.interpreter.impl.EGraphImpl#add(org.eclipse.emf.ecore.EObject)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean add(EObject eObject) {
-		boolean isNew = super.add(eObject);
-		if (isNew) {
-			
+	public void didAdd(EObject eObject) {
+		super.didAdd(eObject);
 			Node node = object2node.get(eObject);
 			if (node == null) {
 				node = createNode();
@@ -201,18 +196,15 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 				if (!henshinGraph.getNodes().contains(node))
 					henshinGraph.getNodes().add(node);
 			}
-		}
-		return isNew;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.emf.henshin.interpreter.impl.EGraphImpl#remove(java.lang.Object)
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean remove(Object object) {
-		boolean removed = super.remove(object);
-		if (removed) {
+	public void didRemove(EObject object) {
+		super.didRemove(object);
 			Node node = object2node.get(object);
 			if (node != null) {
 				henshinGraph.getNodes().remove(node);
@@ -225,8 +217,7 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 				}
 				removeSynchronizedPair(node, (EObject) object);
 			}
-		}
-		return removed;
+		
 	}
 	
 	/*

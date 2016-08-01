@@ -183,15 +183,12 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.emf.henshin.interpreter.impl.EGraphImpl#add(org.eclipse.emf.ecore.EObject)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean add(EObject eObject) {
-		boolean isNew = super.add(eObject);
-		if (isNew) {
-			
+	public void didAdd(EObject eObject) {
+			super.didAdd(eObject);
 			Node node = object2node.get(eObject);
 			if (node == null) {
 				node = createNode();
@@ -203,20 +200,16 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 				if (!henshinGraph.getNodes().contains(node))
 					henshinGraph.getNodes().add(node);
 			}
-		}
-		return isNew;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.emf.henshin.interpreter.impl.EGraphImpl#remove(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean remove(Object object) {
-		boolean removed = super.remove(object);
-		if (removed) {
-			Node node = object2node.get(object);
-			if (node != null) {
+	public void didRemove(EObject object) {
+		super.didRemove(object);
+		Node node = object2node.get(object);
+		if (node != null) {
 				henshinGraph.getNodes().remove(node);
 				List<Edge> list = new ArrayList<Edge>(node.getIncoming());
 				list.addAll(node.getOutgoing());
@@ -227,8 +220,6 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 				}
 				removeSynchronizedPair(node, (EObject) object);
 			}
-		}
-		return removed;
 	}
 	
 	/*
