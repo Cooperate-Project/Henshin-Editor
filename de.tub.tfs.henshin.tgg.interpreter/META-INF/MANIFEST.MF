@@ -18,7 +18,9 @@ Require-Bundle: org.eclipse.emf.henshin.interpreter,
  org.eclipse.jdt.core,
  org.eclipse.jface.text,
  com.google.inject;bundle-version="3.0.0",
- de.tub.tfs.henshin.tgg.interpreter.config;bundle-version="1.0.0";resolution:=optional
+ de.tub.tfs.henshin.tgg.interpreter.config;bundle-version="1.0.0";resolution:=optional,
+ org.eclipse.emf.henshin.model,
+ org.apache.log4j;bundle-version="1.2.15"
 Export-Package: de.tub.tfs.henshin.tgg.interpreter,
  de.tub.tfs.henshin.tgg.interpreter.gui,
  de.tub.tfs.henshin.tgg.interpreter.impl,
