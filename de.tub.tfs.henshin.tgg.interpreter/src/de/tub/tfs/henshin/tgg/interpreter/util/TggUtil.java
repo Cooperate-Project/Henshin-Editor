@@ -218,6 +218,12 @@ public class TggUtil {
 			return true;
 		return false;
 	}
+	
+	public static Boolean getIsNullValueMatching(Module module) {
+		if(module==null) return false;
+		String value = TggUtil.getElemAnnotationValue(module, "nullValueMatching");
+		return Boolean.valueOf(value);
+	}
 
 	
 }

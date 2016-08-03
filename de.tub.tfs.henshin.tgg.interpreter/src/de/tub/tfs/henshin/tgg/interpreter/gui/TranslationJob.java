@@ -57,6 +57,7 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EContentsEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.henshin.interpreter.Engine;
+import org.eclipse.emf.henshin.model.Annotation;
 import org.eclipse.emf.henshin.model.IndependentUnit;
 import org.eclipse.emf.henshin.model.Module;
 import org.eclipse.emf.henshin.model.Rule;
@@ -74,6 +75,7 @@ import de.tub.tfs.henshin.tgg.interpreter.impl.TggTransformationImpl;
 import de.tub.tfs.henshin.tgg.interpreter.postprocessing.AbstractPostProcessor;
 import de.tub.tfs.henshin.tgg.interpreter.postprocessing.AbstractPostProcessorFactory;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 //
 //...
@@ -282,8 +284,7 @@ public class TranslationJob extends Job {
 					// execute all modules once
 					for (int modulePos=0;modulePos<modules.size();modulePos++) {
 						tggTransformation.setOpRuleList(opRules.get(modulePos));
-//						tggTransformation.setNullValueMatching(modules.get(modulePos)
-//								.isNullValueMatching());
+						tggTransformation.setNullValueMatching(TggUtil.getIsNullValueMatching(modules.get(modulePos)));
 
 						String trFileName = fileNames.get(modulePos);
 						monitor.subTask("Applying " + trFileName );
@@ -303,8 +304,7 @@ public class TranslationJob extends Job {
 
 
 							tggTransformation.setOpRuleList(opRules.get(i));
-//							tggTransformation.setNullValueMatching(modules.get(i)
-//									.isNullValueMatching());
+							tggTransformation.setNullValueMatching(TggUtil.getIsNullValueMatching(modules.get(i)));
 
 							trFileName = fileNames.get(i);
 							monitor.subTask("Applying " + trFileName );
