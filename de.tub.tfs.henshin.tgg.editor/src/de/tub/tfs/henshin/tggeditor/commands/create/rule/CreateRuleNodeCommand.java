@@ -22,6 +22,7 @@ import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.create.CreateNodeCommand;
 
 
@@ -85,7 +86,7 @@ public class CreateRuleNodeCommand extends CreateNodeCommand {
 		lhsNode.setName(rhsNode.getName());
 		lhsGraph = rule.getLhs();
 		lhsGraph.getNodes().add(lhsNode);
-		((TNode) rhsNode).setMarkerType(null);
+		TggUtil.setElemMarker(rhsNode, null);
 		
 		mapping = HenshinFactory.eINSTANCE.createMapping(lhsNode,rhsNode);
 		rule.getMappings().add(mapping);

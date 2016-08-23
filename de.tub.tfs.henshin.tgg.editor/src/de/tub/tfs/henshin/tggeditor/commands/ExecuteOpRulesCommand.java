@@ -165,33 +165,33 @@ public class ExecuteOpRulesCommand extends CompoundCommand {
 					node.setComponent(tggTrafo.getTripleComponentNodeMap().get(graphNodeEObject));
 			if (isTranslatedNodeMap.containsKey(graphNodeEObject)) {
 				// set marker type to mark the translated nodes
-				node.setMarkerType(RuleUtil.Not_Translated_Graph);
+				TggUtil.setElemMarker(node, RuleUtil.Not_Translated_Graph);
 
 				if (isTranslatedNodeMap.get(graphNodeEObject)) {
 					// mark the translated node
-					node.setMarkerType(RuleUtil.Translated_Graph);
+					TggUtil.setElemMarker(node, RuleUtil.Translated_Graph);
 				}
 				// check contained attributes
 				for (Attribute at : node.getAttributes()) {
 					// set marker type to mark the translated attributes
 					TAttribute a = (TAttribute) at;
-					a.setMarkerType(RuleUtil.Not_Translated_Graph);
+					TggUtil.setElemMarker(a, RuleUtil.Not_Translated_Graph);
 					//if (isTranslatedAttributeMap.get(graphNodeEObject)==null)continue; //NEW GERARD
 					if(!isTranslatedAttributeMap.get(graphNodeEObject).containsKey(a.getType()))
 						System.out.println("Inconsistent marking: attribute" + a.getType() + "=" + a.getValue() 
 								+ " is not marked, but its container node is marked.");
 					else if (isTranslatedAttributeMap.get(graphNodeEObject).get(a.getType())) {
 						// mark the translated attribute
-						a.setMarkerType(RuleUtil.Translated_Graph);
+						TggUtil.setElemMarker(a, RuleUtil.Translated_Graph);
 					}
 				}
 			}
 			else // node is not in marked component 
 				{
-				node.setMarkerType(null);
+				TggUtil.setElemMarker(node, null);
 				for (Attribute at : node.getAttributes()) {
 					TAttribute a = (TAttribute) at;
-					a.setMarkerType(null);
+					TggUtil.setElemMarker(a, null);
 				}
 			}
 		}
@@ -205,16 +205,16 @@ public class ExecuteOpRulesCommand extends CompoundCommand {
 			isTranslatedEdgeMap.get(sourceNodeEObject).get(edge.getType()).containsKey(targetNodeEObject)) 
 			{
 				// set marker type to mark the translated attributes
-				edge.setMarkerType(RuleUtil.Not_Translated_Graph);
+				TggUtil.setElemMarker(edge, RuleUtil.Not_Translated_Graph);
 
 				if (isTranslatedEdgeMap.get(sourceNodeEObject).get(edge.getType()).get(targetNodeEObject)) {
 					// mark the translated edge
-					edge.setMarkerType(RuleUtil.Translated_Graph);
+					TggUtil.setElemMarker(edge, RuleUtil.Translated_Graph);
 				}
 			}
 			else // edge is not in marked component - delete markers
 			{
-				edge.setMarkerType(null);
+				TggUtil.setElemMarker(edge, null);
 			}
 		}
 		return;

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -53,6 +54,9 @@ import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.muvitor.ui.utils.EMFModelManager;
 
 public class LoadHandler extends AbstractHandler implements IHandler {
+	
+	private static final Logger LOG = Logger.getLogger(LoadHandler.class);
+	
 	public static final String henshinExt = "henshin";
 	protected static List<String> trFileNames = new Vector<String>();
 	protected static IFile trFile;
@@ -180,13 +184,13 @@ public class LoadHandler extends AbstractHandler implements IHandler {
 							trSystems.add((TGG) modules.get(0));
 
 						monitor.worked(1);
-						System.out.println("Grammar " + trFile.getName() + " was loaded successfully.");
+						LOG.info("Grammar " + trFile.getName() + " was loaded successfully.");
 
 
 					}
 					if (useCache){
-						System.out.println("Only changed modules have been loaded.");
-						System.out.println("Hold Shift while clicking the Load button to clear cache.");
+						LOG.info("Only changed modules have been loaded.");
+						LOG.info("Hold Shift while clicking the Load button to clear cache.");
 					}
 				} finally {
 					monitor.done();
@@ -261,7 +265,7 @@ public class LoadHandler extends AbstractHandler implements IHandler {
 			}
 		}
 		saveCachedQueue();
-		System.out.println("Registered Grammars will be loaded when needed.");
+		LOG.info("Registered Grammars will be loaded when needed.");
 		
 		return null;
 	}

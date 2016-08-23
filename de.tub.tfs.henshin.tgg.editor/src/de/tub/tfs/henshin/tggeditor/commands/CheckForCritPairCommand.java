@@ -31,6 +31,7 @@ import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.TggAggInfo;
 import de.tub.tfs.henshin.tggeditor.util.GraphUtil;
 import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
@@ -138,7 +139,7 @@ List<CriticalPair> critPairList = _aggInfo.getConflictOverlappings(_firstRule, _
 		if (!criticalObjects.isEmpty()) {
 			for (EObject eObj : criticalObjects) {
 				if (eObj instanceof TNode && graph.getNodes().contains((Node)eObj)) {
-					((TNode) eObj).setMarkerType(RuleUtil.CP_CRITICAL);
+					TggUtil.setElemMarker((TNode)eObj, RuleUtil.CP_CRITICAL);
 				}
 			}
 		}

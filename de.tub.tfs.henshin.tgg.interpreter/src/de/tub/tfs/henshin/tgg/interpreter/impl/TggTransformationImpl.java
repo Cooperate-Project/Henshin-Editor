@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -44,6 +45,8 @@ import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 public class TggTransformationImpl implements TggTransformation {
+	
+	private static final Logger LOG = Logger.getLogger(TggTransformationImpl.class);
 
 	/**
 	 * the maps for the marked elements 
@@ -293,10 +296,10 @@ public class TggTransformationImpl implements TggTransformation {
 				for (Rule rule : opRulesList) {
 
 					
-					if (debug){
-						System.out.println();
-						System.out.print(String.format("%1$15s", eGraph.size()+"     "));
-						System.out.print(String.format("%1$65s", rule.getName()+" "));
+					if (LOG.isDebugEnabled()){
+						LOG.debug("\n");
+						LOG.debug(String.format("%1$15s", eGraph.size()+"     "));
+						LOG.debug(String.format("%1$65s", rule.getName()+" "));
 					}
 					startTimeOneStep=System.nanoTime();
 					if (monitor!=null)
@@ -327,9 +330,9 @@ public class TggTransformationImpl implements TggTransformation {
 								foundApplicationForRuleSet = foundApplicationForRuleSet || foundApplicationForRule;
 
 								// show one bar for each successful rule application
-								if(foundApplicationForRule && debug){System.out.print("|");}
+								if(foundApplicationForRule && LOG.isDebugEnabled()){LOG.debug("|");}
 							} catch (RuntimeException e){
-								e.printStackTrace();
+								LOG.error("Error applying rules", e);
 								matchesToCheck = false;
 							}
 						}
@@ -346,7 +349,7 @@ public class TggTransformationImpl implements TggTransformation {
 						maxDurationRuleName=rule.getName();
 					}
 					if(duration>10)
-						System.out.print(//"Rule " + rule.getName() + ":" + 
+						LOG.info(//"Rule " + rule.getName() + ":" + 
 								duration + "ms");
 					}
 
@@ -354,19 +357,19 @@ public class TggTransformationImpl implements TggTransformation {
 				}
 
 			} catch (RuntimeException e) {
-				System.out.println("Rule "
+				LOG.error("Rule "
 						+ currentRule.getName()
 						+ " caused a runtime exception. Check input parameter settings: "
-						+ e.getMessage());
+						, e);
 			}
-			if (debug)System.out.println("");
+			LOG.debug("");
 			continueRuleApplications = foundApplicationForRuleSet;
 			foundApplication = foundApplication || foundApplicationForRuleSet;
 		}
 		
-		if(debug){ System.out.println("### Rule " + maxDurationRuleName + " had the highest execution time of:" + 
-				maxDuration + "ms");	
-		}
+		if(LOG.isDebugEnabled())
+			LOG.debug("### Rule " + maxDurationRuleName + " had the highest execution time of:" + maxDuration + "ms");	
+		
 		return foundApplication;
 	}
 
@@ -382,7 +385,7 @@ public class TggTransformationImpl implements TggTransformation {
 				TNode ruleNodeRHS = (TNode) n;
 				EObject nodeEObject = resultMatch.getNodeTarget(ruleNodeRHS);
 				tripleComponentNodeMap.put(nodeEObject,ruleNodeRHS.getComponent());
-				if (RuleUtil.Translated.equals(ruleNodeRHS.getMarkerType())) {
+				if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleNodeRHS))) {
 					isTranslatedNodeMap.put(nodeEObject, true);
 					updateTranslatedAttributeMap(ruleNodeRHS, nodeEObject);
 					updateTranslatedEdgeMap(ruleNodeRHS, nodeEObject, resultMatch);
@@ -426,18 +429,18 @@ public class TggTransformationImpl implements TggTransformation {
 		// fill isTranslatedAttributeMap
 		// scan the contained attributes for <tr>
 		for (Attribute ruleAttribute : ruleNodeRHS.getAttributes()) {
-			String isMarked=((TAttribute) ruleAttribute).getMarkerType();
+			String isMarked = TggUtil.getElemMarker(ruleAttribute);
 			if (RuleUtil.Translated.equals(isMarked)) {
-				//mark this attribute to be translated
-				putAttributeInMap(graphNodeEObject,ruleAttribute.getType(),true);
+				// mark this attribute to be translated
+				putAttributeInMap(graphNodeEObject, ruleAttribute.getType(), true);
 			}
-		}			
+		}
 	}
 	
 	private void putAttributeInMap(EObject graphNodeEObject, EAttribute eAttr, Boolean value) {
 		HashMap<EAttribute,Boolean> attrMap = isTranslatedAttributeMap.get(graphNodeEObject);
 		if(attrMap==null) {
-			System.out.println("!WARNING: Translated attribute map is missing node entry.");
+			LOG.warn("!WARNING: Translated attribute map is missing node entry.");
 			return;
 		}
 		attrMap.put(eAttr, value);
@@ -449,7 +452,7 @@ public class TggTransformationImpl implements TggTransformation {
 		EObject targetNodeeObject;
 		// scan the outgoing edges for <tr>
 		for (Edge ruleEdge : ruleNode.getOutgoing()) {
-			if (RuleUtil.Translated.equals( (((TEdge) ruleEdge).getMarkerType()))) {
+			if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleEdge))) {
 				Node ruleTarget = ruleEdge.getTarget();
 				targetNodeeObject = resultMatch.getNodeTarget(ruleTarget);
 				// put edge in hashmap
@@ -463,7 +466,7 @@ public class TggTransformationImpl implements TggTransformation {
 			EObject sourceNodeEObject, EReference eRef, EObject targetNodeEObject, Boolean value) {
 		HashMap<EReference,HashMap<EObject,Boolean>> edgeMap = isTranslatedEdgeMap.get(sourceNodeEObject);
 		if(edgeMap==null) {
-			System.out.println("Translated edge map is missing node entry.");
+			LOG.warn("Translated edge map is missing node entry.");
 			return;
 		}
 		if(!edgeMap.containsKey(eRef))
@@ -542,7 +545,7 @@ public class TggTransformationImpl implements TggTransformation {
 						addToTranslatedEdgeMap(o,ref,(EObject) referenceValue,markerValue);
 				}
 				else{
-					System.out.println("!WARNING: transformation initialisation error, references are not a list nor a plain object reference");
+					LOG.warn("!WARNING: transformation initialisation error, references are not a list nor a plain object reference");
 				}
 		    }
 		}

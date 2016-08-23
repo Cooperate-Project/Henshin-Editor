@@ -16,6 +16,7 @@ import org.eclipse.emf.henshin.model.Rule;
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.create.CreateAttributeCommand;
 
 
@@ -62,7 +63,8 @@ public class CreateRuleAttributeCommand extends CreateAttributeCommand {
 			lhsNode = RuleUtil.getLHSNode(node);
 			if (lhsNode == null) {
 				// case: attribute is created
-				((TAttribute) attribute).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(attribute, RuleUtil.NEW);
+				//((TAttribute) attribute).setMarkerType(RuleUtil.NEW);
 				lhsAttr = null;
 			} else {
 				// case: attribute is preserved

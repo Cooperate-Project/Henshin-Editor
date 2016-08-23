@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TggPackage;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.editpolicies.graphical.AttributeComponentEditPolicy;
 import de.tub.tfs.muvitor.gef.directedit.IDirectEditPart.IGraphicalDirectEditPart;
 import de.tub.tfs.muvitor.gef.editparts.AdapterGraphicalEditPart;
@@ -111,7 +112,7 @@ public class AttributeEditPart extends AdapterGraphicalEditPart<TAttribute> impl
 		setName();
 		if (getParent() != null)
 			((TNodeObjectEditPart) getParent()).getFigure().repaint();
-		labelWithMarker.setMarker(tAttribute.getMarkerType());
+		labelWithMarker.setMarker(TggUtil.getElemMarker(tAttribute));
 		super.refreshVisuals();
 	}
 

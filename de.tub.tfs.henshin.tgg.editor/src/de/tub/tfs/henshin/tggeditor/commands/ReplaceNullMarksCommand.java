@@ -18,6 +18,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 //NEW GERARD
 /**
  * The Class ExecutionInitCommand creates the initial marking for executing the operational rules on a given graph. 
@@ -62,21 +63,20 @@ public class ReplaceNullMarksCommand extends CompoundCommand {
 	}
 
 	protected void initGraphMarkers() {
-		TNode tNode;
 		for (Node node : graph.getNodes()) {
 			if (node instanceof TNode) {
-				tNode=(TNode) node;
-				if(tNode.getMarkerType()==null)
-					tNode.setMarkerType(mark);
+
+				if(TggUtil.getElemMarker(node) == null)
+					TggUtil.setElemMarker(node, mark);
 					
-				for (Attribute a : tNode.getAttributes()) {
-					if(null==(((TAttribute) a).getMarkerType()))
-						((TAttribute) a).setMarkerType(mark);
+				for (Attribute a : node.getAttributes()) {
+					if(TggUtil.getElemMarker(a) == null)
+						TggUtil.setElemMarker(a, mark);
 				}
 				
-				for (Edge e : tNode.getOutgoing()) {
-					if(null==(((TEdge) e).getMarkerType()))
-						((TEdge) e).setMarkerType(mark);
+				for (Edge e : node.getOutgoing()) {
+					if(TggUtil.getElemMarker(e) == null)
+						TggUtil.setElemMarker(e, mark);
 				}
 			}
 		}

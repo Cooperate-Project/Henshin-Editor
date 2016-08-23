@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.GenerateOpRuleCommand;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.ProcessRuleCommand;
 import de.tub.tfs.henshin.tggeditor.editparts.tree.rule.RuleTreeEditPart;
@@ -77,7 +78,7 @@ public abstract class GenerateOpRuleAction extends SelectionAction {
 				if(layoutSystem == null) return false;
 				//NEW Gerard generalization from FT to op
 				if (!GenerateOpRulesAction.calcInProgress)
-					if(rule==null || !RuleUtil.TGG_RULE.equals(rule.getMarkerType())) {
+					if(rule == null || !RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(rule))) {
 						return false;
 				}
 				return true;

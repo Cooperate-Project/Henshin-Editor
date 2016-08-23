@@ -24,6 +24,7 @@ import java.util.Queue;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -54,6 +55,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 public class TransHandler extends AbstractHandler implements IHandler {
+	
+	private static final Logger LOG = Logger.getLogger(TransHandler.class);
 
 	public static final String TRANSLATION_JOB_FAMILY = "lu.uni.snt.translationJobFamily";
 	protected static boolean useOutputFolder;
@@ -149,7 +152,7 @@ public class TransHandler extends AbstractHandler implements IHandler {
 				}
 			}
 			if (entries > 0){
-				System.out.println("Config file at " + uri.toFileString() + " has benn loaded.");
+				LOG.info("Config file at " + uri.toFileString() + " has benn loaded.");
 			}
 		} catch (IOException e) {
 			try {
@@ -174,7 +177,7 @@ public class TransHandler extends AbstractHandler implements IHandler {
 					} catch (InterruptedException e) {
 						
 					}
-					System.out.println(joinedJob.getName() + " finished loading Grammars.");
+					LOG.info(joinedJob.getName() + " finished loading Grammars.");
 				} else {
 					synchronized (lockedObjects[idx]) {
 						idx++;
@@ -236,7 +239,7 @@ public class TransHandler extends AbstractHandler implements IHandler {
 
 		
 		Queue<IFile> transQueue = retrieveFilesForTranslation(event);
-		System.out.println(transQueue);
+		LOG.info(transQueue);
 		
 		
 		
@@ -248,7 +251,7 @@ public class TransHandler extends AbstractHandler implements IHandler {
 
 		idx = 0;
 		inputFiles = new ConcurrentLinkedQueue<IFile>((List<IFile>) transQueue);
-		System.out.println(inputFiles);
+		LOG.info(inputFiles);
 		
 		for (int i = 0; i < creator.length; i++) {
 			idx = i;
@@ -293,15 +296,14 @@ public class TransHandler extends AbstractHandler implements IHandler {
 
 		execution_End=System.currentTimeMillis();
 
-		System.out.println("\n" + "==================================================================================== \n"
+		LOG.info("\n" + "==================================================================================== \n"
 				+ "Summary of execution times in ms (parsing, transformation, serialisation) \n"
 				+ "====================================================================================");
 		for (String file : executionTimesMap.keySet()) {
 			ExecutionTimes times=executionTimesMap.get(file);
-			System.out.println(file + " : " + times.overall + " ( " + times.stage1 + ", " + times.stage2 + ", " + times.stage3 + " )");
+			LOG.info(file + " : " + times.overall + " ( " + times.stage1 + ", " + times.stage2 + ", " + times.stage3 + " )");
 		}
-		System.out
-		.println(         "------------------------------------------------------------------------------------ \r\n"
+		LOG.info(         "------------------------------------------------------------------------------------ \r\n"
 				+ "overall execution time (parallel processing)"
 				+ " : " + (execution_End - execution_Begin) +"\n"
 				+ "====================================================================================");

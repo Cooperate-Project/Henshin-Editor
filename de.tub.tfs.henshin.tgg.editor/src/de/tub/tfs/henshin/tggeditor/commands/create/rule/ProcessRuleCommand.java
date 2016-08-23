@@ -36,6 +36,7 @@ import de.tub.tfs.henshin.tgg.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.util.GraphOptimizer;
 import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
 
@@ -137,8 +138,12 @@ public abstract class ProcessRuleCommand extends Command {
 		newRule = (Rule) result;
 		newRule.setCheckDangling(false);
 		newRule.setName(prefix + oldRule.getName());
-		((TGGRule) newRule).setMarkerType(getRuleMarker());
-		((TGGRule) newRule).setIsMarked(true);
+		
+
+		TggUtil.setElemMarker(newRule, RuleUtil.TGG_RULE);
+		//((TGGRule) newRule).setMarkerType(getRuleMarker());
+		//TggUtil.addElemAnnotation(newRule, RuleUtil.IS_MARKER, "true");
+		//((TGGRule) newRule).setIsMarked(true);
 
 		// add new rule to the module
 		oldRule.getModule().getUnits().add(newRule);
@@ -188,10 +193,10 @@ public abstract class ProcessRuleCommand extends Command {
 		GraphOptimizer.optimize(newRule.getLhs());
 	}
 
-	protected void setEdgeMarker(Edge newEdgeRHS,
-			String markerType) {
-		if(newEdgeRHS!=null)
-		((TEdge) newEdgeRHS).setMarkerType(markerType);
+	protected void setEdgeMarker(Edge newEdgeRHS, String markerType) {
+		if (newEdgeRHS != null)
+			TggUtil.setElemMarker(newEdgeRHS, markerType);
+
 	}
 
 	
@@ -314,7 +319,7 @@ public abstract class ProcessRuleCommand extends Command {
 
 	
 	protected void setNodeMarker(Node rhsNode, String markerType) {
-		((TNode) rhsNode).setMarkerType(markerType);
+		TggUtil.setElemMarker(rhsNode, markerType);
 	}
 
 	protected void setNodeLayout(Node rhsNode, Node oldNode) {

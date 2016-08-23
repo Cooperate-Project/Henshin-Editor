@@ -19,6 +19,7 @@ import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.delete.DeleteEdgeCommand;
 
 /**
@@ -51,7 +52,7 @@ public class MarkUnspecifiedEdgeCommand extends CompoundCommand {
 	 */
 	@Override
 	public void execute() {
-		if (((TEdge) rhsEdge).getMarkerType() != null) {
+		if (TggUtil.getElemMarker(rhsEdge) != null) {
 			// edge is currently marked as new and shall be demarked
 			demark();
 		} 
@@ -66,7 +67,7 @@ public class MarkUnspecifiedEdgeCommand extends CompoundCommand {
 	 * 
 	 */
 	private void mark() {
-		((TEdge) rhsEdge).setMarkerType(RuleUtil.TR_UNSPECIFIED);
+		TggUtil.setElemMarker(rhsEdge, RuleUtil.TR_UNSPECIFIED);
 	}
 
 
@@ -74,7 +75,7 @@ public class MarkUnspecifiedEdgeCommand extends CompoundCommand {
 	 * 
 	 */
 	private void demark() {
-				((TEdge) rhsEdge).setMarkerType(null);
+			TggUtil.setElemMarker(rhsEdge, null);
 			
 	}
 

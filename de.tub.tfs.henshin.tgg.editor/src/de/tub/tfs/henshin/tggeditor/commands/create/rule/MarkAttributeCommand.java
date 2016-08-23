@@ -21,6 +21,7 @@ import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.muvitor.commands.SimpleDeleteEObjectCommand;
 
 /**
@@ -53,7 +54,7 @@ public class MarkAttributeCommand extends CompoundCommand {
 		Node rhsNode=rhsAttribute.getNode();
 		Node lhsNode = RuleUtil.getLHSNode(rhsNode);
 
-		if (((TAttribute) rhsAttribute).getMarkerType() != null &&((TAttribute) rhsAttribute).getMarkerType().equals( RuleUtil.NEW)) { 
+		if (RuleUtil.NEW.equals(TggUtil.getElemMarker(rhsAttribute))) { 
 			// attribute is currently marked as new and shall be demarked
 			if(lhsNode == null) {
 				//node is currently marked as new,
@@ -69,12 +70,14 @@ public class MarkAttributeCommand extends CompoundCommand {
 			lhsAttribute.setType(rhsAttribute.getType());
 			lhsAttribute.setValue(rhsAttribute.getValue());
 			// remove marker
-			((TAttribute) rhsAttribute).setMarkerType(null);
+			TggUtil.setElemMarker(rhsAttribute, null);
+			//((TAttribute) rhsAttribute).setMarkerType(null);
 			
 		} 
 		else {
 			// attribute is currently not marked, thus mark it 
-			((TAttribute) rhsAttribute).setMarkerType(RuleUtil.NEW);
+			TggUtil.setElemMarker(rhsAttribute, RuleUtil.NEW);
+			//((TAttribute) rhsAttribute).setMarkerType(RuleUtil.NEW);
 			// delete lhs attribute
 			Attribute lhsAttribute = RuleUtil.getLHSAttribute(rhsAttribute);
 			if(lhsAttribute!=null){

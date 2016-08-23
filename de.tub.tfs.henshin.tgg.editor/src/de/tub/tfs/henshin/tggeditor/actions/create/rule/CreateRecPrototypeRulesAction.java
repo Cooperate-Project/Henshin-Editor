@@ -41,6 +41,7 @@ import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.ExceptionUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.editparts.tree.TransformationSystemTreeEditPart;
 import de.tub.tfs.henshin.tggeditor.editparts.tree.rule.RuleFolderTreeEditPart;
 import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
@@ -160,7 +161,8 @@ public class CreateRecPrototypeRulesAction extends SelectionAction {
 	
 	private Rule createEmptyRule(EClass eClass,EStructuralFeature feat){
 		TGGRule r = TggFactory.eINSTANCE.createTGGRule();
-		r.setMarkerType(RuleUtil.TGG_RULE);
+		TggUtil.setElemMarker(r, RuleUtil.TGG_RULE);
+		//r.setMarkerType(RuleUtil.TGG_RULE);
 		r.setName("Proto" + eClass.getName() + "_" + feat.getName() + "2SPELL");
 		TripleGraph lhs = TggFactory.eINSTANCE.createTripleGraph();
 		TripleGraph rhs = TggFactory.eINSTANCE.createTripleGraph();
@@ -173,7 +175,8 @@ public class CreateRecPrototypeRulesAction extends SelectionAction {
 	
 	private Rule createEmptyRule(EClass eClass){
 		TGGRule r = TggFactory.eINSTANCE.createTGGRule();
-		r.setMarkerType(RuleUtil.TGG_RULE);
+		TggUtil.setElemMarker(r, RuleUtil.TGG_RULE);
+		//r.setMarkerType(RuleUtil.TGG_RULE);
 		r.setName("Proto" + eClass.getName() + "2SPELL");
 		TripleGraph lhs = TggFactory.eINSTANCE.createTripleGraph();
 		TripleGraph rhs = TggFactory.eINSTANCE.createTripleGraph();
@@ -189,7 +192,7 @@ public class CreateRecPrototypeRulesAction extends SelectionAction {
 		tNode.setType(eClass);
 		if (create){
 			rule.getRhs().getNodes().add(tNode);
-			tNode.setMarkerType(RuleUtil.NEW);
+			TggUtil.setElemMarker(tNode, RuleUtil.NEW);
 		} else {
 			rule.getRhs().getNodes().add(tNode);
 			TNode lhsNode = TggFactory.eINSTANCE.createTNode();
@@ -197,7 +200,7 @@ public class CreateRecPrototypeRulesAction extends SelectionAction {
 			rule.getLhs().getNodes().add(lhsNode);
 			Mapping mapping = HenshinFactory.eINSTANCE.createMapping(lhsNode, tNode);
 			rule.getMappings().add(mapping);
-			tNode.setMarkerType(null);
+			TggUtil.setElemMarker(tNode, null);
 		}
 		return tNode;
 	}
@@ -205,7 +208,8 @@ public class CreateRecPrototypeRulesAction extends SelectionAction {
 	private TEdge addFeature(TNode source,TNode target,EStructuralFeature feat){
 		TEdge tEdge = TggFactory.eINSTANCE.createTEdge();
 		tEdge.setType((EReference) feat);
-		tEdge.setMarkerType(RuleUtil.NEW);
+		TggUtil.setElemMarker(tEdge, RuleUtil.NEW);
+		//tEdge.setMarkerType(RuleUtil.NEW);
 		tEdge.setSource(source);
 		tEdge.setTarget(target);
 		source.getGraph().getEdges().add(tEdge);

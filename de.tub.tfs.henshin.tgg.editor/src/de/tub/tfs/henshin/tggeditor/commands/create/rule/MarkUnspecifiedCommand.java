@@ -12,22 +12,12 @@ package de.tub.tfs.henshin.tggeditor.commands.create.rule;
 
 import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.Edge;
-import org.eclipse.emf.henshin.model.Graph;
-import org.eclipse.emf.henshin.model.HenshinFactory;
 import org.eclipse.emf.henshin.model.Mapping;
 import org.eclipse.emf.henshin.model.Node;
-import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
 
-import de.tub.tfs.henshin.tgg.TAttribute;
-import de.tub.tfs.henshin.tgg.TEdge;
-import de.tub.tfs.henshin.tgg.TNode;
-import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
-import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
-import de.tub.tfs.muvitor.commands.SimpleDeleteEObjectCommand;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 /**
  * The class MarkCommand can mark a node in a rule as new or not new. It makes
@@ -64,16 +54,16 @@ public class MarkUnspecifiedCommand extends CompoundCommand {
 	@Override
 	public void execute() {
 		getCommands().clear();
-		if(((TNode) rhsNode).getMarkerType()==null){
-				mark();
-		// case: node is already marked
-		}else {
+		if (TggUtil.getElemMarker(rhsNode) == null) {
+			mark();
+			// case: node is already marked
+		} else {
 			demark();
 		}
 		super.execute();
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.CompoundCommand#undo()
 	 */
@@ -108,7 +98,7 @@ public class MarkUnspecifiedCommand extends CompoundCommand {
 
 		// mark all contained attributes as new
 		for (Attribute attr : rhsNode.getAttributes()) {
-			if (((TAttribute) attr).getMarkerType() != null){ // attribute is already marked as created
+			if (TggUtil.getElemMarker(attr) != null){ // attribute is already marked as created
 			}
 			else
 			{   // mark attribute as created
@@ -120,22 +110,22 @@ public class MarkUnspecifiedCommand extends CompoundCommand {
 		
 		for(Edge e:rhsNode.getIncoming()){
 			// if edge is not marked, then mark it
-			if(((TEdge) e).getMarkerType() == null)
+			if(TggUtil.getElemMarker(e) == null)
 				add(new MarkUnspecifiedEdgeCommand(e));
 		}
 		for(Edge e:rhsNode.getOutgoing()){
 			// if edge is not marked, then mark it
-			if(((TEdge) e).getMarkerType() == null)
+			if(TggUtil.getElemMarker(e) == null)
 				add(new MarkUnspecifiedEdgeCommand(e));
 		}
 
-		((TNode) rhsNode).setMarkerType(RuleUtil.TR_UNSPECIFIED);
+		TggUtil.setElemMarker(rhsNode, RuleUtil.TR_UNSPECIFIED);
 	}
 	
 	/**
 	 * marks a node as not new and changes the model accordingly
 	 */
 	private void demark() {
-		((TNode) rhsNode).setMarkerType(null);
+		TggUtil.setElemMarker(rhsNode, null);
 	}
 }

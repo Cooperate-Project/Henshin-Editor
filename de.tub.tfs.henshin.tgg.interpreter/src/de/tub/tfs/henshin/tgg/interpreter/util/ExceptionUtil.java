@@ -10,12 +10,16 @@
  *******************************************************************************/
 package de.tub.tfs.henshin.tgg.interpreter.util;
 
-public class ExceptionUtil {
+import org.apache.log4j.Logger;
 
-	public static void error(String errorSstring) {
-		System.out.println("TGG interpreter error: " + errorSstring);
+
+public class ExceptionUtil {
+	
+	private static final Logger LOG = Logger.getLogger(ExceptionUtil.class);
+
+	public static void error(String errorString) {
 		Throwable t = new Throwable();
-		t.printStackTrace();
+		LOG.error("TGG interpreter error: " + errorString, t);
 	}
 	
 	

@@ -21,6 +21,7 @@ import org.eclipse.swt.graphics.Color;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TggPackage;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.editparts.graphical.EdgeEditPart;
 import de.tub.tfs.henshin.tggeditor.editparts.graphical.RuleObjectTextWithMarker;
 import de.tub.tfs.henshin.tggeditor.editpolicies.graphical.EdgeEndpointEditPartPolicy;
@@ -134,8 +135,7 @@ public class RuleEdgeEditPart extends EdgeEditPart {
 			
 		}		
 		// remove lhs edge, if rule creates the edge
-		if( ((TEdge) rhsEdge).getMarkerType()!=null
-				&& ((TEdge) rhsEdge).getMarkerType().equals(RuleUtil.NEW)){
+		if( RuleUtil.NEW.equals(TggUtil.getElemMarker(rhsEdge))){
 			if (lhsEdgesList.size()==1) 
 			{
 				Edge lhsEdge = lhsEdgesList.get(0);

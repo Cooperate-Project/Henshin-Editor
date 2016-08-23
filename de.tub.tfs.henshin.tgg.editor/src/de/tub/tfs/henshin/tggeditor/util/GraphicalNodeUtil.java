@@ -49,6 +49,7 @@ import de.tub.tfs.henshin.tgg.interpreter.impl.TggHenshinEGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.ExceptionUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.TreeEditor;
 import de.tub.tfs.henshin.tggeditor.figures.NodeFigure;
 import de.tub.tfs.muvitor.commands.SimpleDeleteEObjectCommand;
@@ -523,7 +524,7 @@ public class GraphicalNodeUtil {
 
 
 	public static void refreshIsMarked(Node ruleNodeRHS) {
-		if (((TNode) ruleNodeRHS).getMarkerType() != null)
+		if (TggUtil.getElemMarker(ruleNodeRHS) != null)
 			return;
 		else { // marker is not available, thus copy from layout model and
 				// delete entry in layout model
@@ -540,26 +541,26 @@ public class GraphicalNodeUtil {
 //			if (ModelUtil.getRuleLayout(rule)!=null)
 //				ruleNodeRHS.setMarkerType(RuleUtil.Translated);
 //			else
-				((TNode) ruleNodeRHS).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(ruleNodeRHS, RuleUtil.NEW);
 
 			// check for existing node in LHS
 			Node lhsNode = RuleUtil
 					.getLHSNode(ruleNodeRHS);
 			if (lhsNode != null) {
 				// node is preserved -> no marker
-				((TNode) ruleNodeRHS).setMarkerType(null);
+				TggUtil.setElemMarker(ruleNodeRHS, null);
 			} else {
 				// node is created -> add marker
-				((TNode) ruleNodeRHS).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(ruleNodeRHS, RuleUtil.NEW);
 			}
 
 		} else { // layout is found
 			Boolean isTranslatedLHS = nodeLayout.getLhsTranslated();
 			boolean isNew = nodeLayout.isNew();
 			if (isTranslatedLHS == null) {
-				((TNode) ruleNodeRHS).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(ruleNodeRHS, RuleUtil.NEW);
 			} else {
-				((TNode) ruleNodeRHS).setMarkerType(RuleUtil.Translated);
+				TggUtil.setElemMarker(ruleNodeRHS, RuleUtil.Translated);
 			}
 		}
 		// delete layout entry in layout model
@@ -595,11 +596,11 @@ public class GraphicalNodeUtil {
 
 	// returns whether the node is translated already in the LHS
 	public static Boolean getNodeIsTranslated(Node node) {
-		if (((TNode) node).getMarkerType() != null) {
-			if (RuleUtil.Not_Translated_Graph.equals(((TNode) node).getMarkerType()))
+		if (TggUtil.getElemMarker(node) != null) {
+			if (RuleUtil.Not_Translated_Graph.equals(TggUtil.getElemMarker(node)))
 				// node is translated by the rule - it is not yet translated
 				return false;
-			else if (RuleUtil.Translated_Graph.equals(((TNode) node).getMarkerType()))
+			else if (RuleUtil.Translated_Graph.equals(TggUtil.getElemMarker(node)))
 				// node is context element - it is already translated
 				return true;
 		} 
@@ -609,7 +610,7 @@ public class GraphicalNodeUtil {
 	
 	// returns true, if the node is marked with the "NEW" marker
 	public static boolean isNew(Node rn) {
-		return (((TNode) rn).getMarkerType()!=null && ((TNode) rn).getMarkerType().equals(RuleUtil.NEW));
+		return RuleUtil.NEW.equals(TggUtil.getElemMarker(rn));
 	}
 	
 	

@@ -13,6 +13,9 @@ package de.tub.tfs.henshin.tggeditor.util;
 import org.eclipse.emf.henshin.model.Attribute;
 
 import de.tub.tfs.henshin.tgg.TAttribute;
+import de.tub.tfs.henshin.tgg.TEdge;
+import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 
 public class AttributeUtil {
@@ -28,12 +31,13 @@ public class AttributeUtil {
 			//NEW
 			public static void setAttributeMarker(Attribute attribute, String markerType) {
 				if (attribute instanceof TAttribute)
-				((TAttribute) attribute).setMarkerType(markerType);
+					TggUtil.setElemMarker((TAttribute)attribute, RuleUtil.NEW);
+				
 			}
 			//NEW
 			public static String getAttributeMarker(Attribute attribute) {
 				if (attribute instanceof TAttribute)
-				return ((TAttribute) attribute).getMarkerType();
+					return TggUtil.getElemMarker((TAttribute)attribute);
 				return null;
 			}
 	

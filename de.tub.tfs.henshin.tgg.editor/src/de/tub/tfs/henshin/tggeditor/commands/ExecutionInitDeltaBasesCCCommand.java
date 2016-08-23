@@ -20,6 +20,7 @@ import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.util.GraphicalRuleUtil;
 
 /**
@@ -71,22 +72,22 @@ public abstract class ExecutionInitDeltaBasesCCCommand extends CompoundCommand {
 			if (node instanceof TNode) {
 				tNode=(TNode) node;
 				boolean nodeIsInDeltaComp = isInDeltaComponent(node);
-				if(!(nodeIsInDeltaComp && tNode.getMarkerType()==null)){//(RuleUtil.NEW_Graph.equals(tNode.getMarkerType())))){
-					tNode.setMarkerType(RuleUtil.Not_Translated_Graph);
+				if(!(nodeIsInDeltaComp && TggUtil.getElemMarker(tNode) == null)){//(RuleUtil.NEW_Graph.equals(tNode.getMarkerType())))){
+					TggUtil.setElemMarker(tNode, RuleUtil.Not_Translated_Graph);
 					
 					for (Attribute a : tNode.getAttributes()) {
-						if(!(nodeIsInDeltaComp && ((TAttribute) a).getMarkerType()==null))//&& (RuleUtil.NEW_Graph.equals(((TAttribute) a).getMarkerType()))))
-							((TAttribute) a).setMarkerType(RuleUtil.Not_Translated_Graph);
+						if(!(nodeIsInDeltaComp && TggUtil.getElemMarker(a) == null))//&& (RuleUtil.NEW_Graph.equals(((TAttribute) a).getMarkerType()))))
+							TggUtil.setElemMarker(a, RuleUtil.Not_Translated_Graph);
 					}
 					
 					for (Edge e : tNode.getOutgoing()) {
-						if(!(nodeIsInDeltaComp && ((TEdge) e).getMarkerType()==null)) //&& (RuleUtil.NEW_Graph.equals(((TEdge) e).getMarkerType()))))
-							((TEdge) e).setMarkerType(RuleUtil.Not_Translated_Graph);
+						if(!(nodeIsInDeltaComp && TggUtil.getElemMarker(e) == null)) //&& (RuleUtil.NEW_Graph.equals(((TEdge) e).getMarkerType()))))
+							TggUtil.setElemMarker(e, RuleUtil.Not_Translated_Graph);
 					}
 
 					for (Edge e : tNode.getIncoming()) {
-						if(!(nodeIsInDeltaComp && ((TEdge) e).getMarkerType()==null)) //&& (RuleUtil.NEW_Graph.equals(((TEdge) e).getMarkerType()))))
-							((TEdge)e).setMarkerType(RuleUtil.Not_Translated_Graph);
+						if(!(nodeIsInDeltaComp && TggUtil.getElemMarker(e) == null)) //&& (RuleUtil.NEW_Graph.equals(((TEdge) e).getMarkerType()))))
+							TggUtil.setElemMarker(e, RuleUtil.Not_Translated_Graph);
 					}
 					
 				}

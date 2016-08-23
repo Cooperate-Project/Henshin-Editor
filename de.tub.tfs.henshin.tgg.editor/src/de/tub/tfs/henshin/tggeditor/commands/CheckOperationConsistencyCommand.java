@@ -27,6 +27,7 @@ import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.dialogs.TextDialog;
 
 /**
@@ -104,24 +105,22 @@ public class CheckOperationConsistencyCommand extends CompoundCommand {
 		int untranslatedEdges=0;
 		int maxPrintedErrors=10;
 		for (Node n : graph.getNodes()) {
-			TNode node = (TNode) n;
 			// set marker type to mark the translated nodes
-			if (RuleUtil.Not_Translated_Graph.equals(node.getMarkerType())) {
-				errorString = "The node [" + node.getName() + ":"
-						+ node.getType().getName() + "] was not translated.";
+			if (RuleUtil.Not_Translated_Graph.equals(TggUtil.getElemMarker(n))) {
+				errorString = "The node [" + n.getName() + ":"
+						+ n.getType().getName() + "] was not translated.";
 				if(untranslatedElements<maxPrintedErrors)
 					errorMessages.add(errorString);
 				untranslatedElements++;
 				untranslatedNodes++;
 			}
 			// check contained attributes
-			for (Attribute at : node.getAttributes()) {
+			for (Attribute a : n.getAttributes()) {
 				// set marker type to mark the translated attributes
-				TAttribute a = (TAttribute) at;
-				if (RuleUtil.Not_Translated_Graph.equals(a.getMarkerType())) {
+				if (RuleUtil.Not_Translated_Graph.equals(TggUtil.getElemMarker(a))) {
 					errorString = "The attribute [" + a.getType().getName()
 							+ "=" + a.getValue() + "] of node ["
-							+ node.getName() + ":" + node.getType().getName()
+							+ n.getName() + ":" + n.getType().getName()
 							+ "] was not translated.";
 					if(untranslatedElements<maxPrintedErrors)
 						errorMessages.add(errorString);
@@ -130,10 +129,9 @@ public class CheckOperationConsistencyCommand extends CompoundCommand {
 				}
 			}
 		}
-		for (Edge e : graph.getEdges()) {
-			TEdge edge = (TEdge) e;
+		for (Edge edge : graph.getEdges()) {
 			// set marker type to mark the translated attributes
-			if (RuleUtil.Not_Translated_Graph.equals(edge.getMarkerType())) {
+			if (RuleUtil.Not_Translated_Graph.equals(TggUtil.getElemMarker(edge))) {
 				errorString = "The edge [" + edge.getType().getName() + ":"
 						+ edge.getSource().getType().getName() + "->"
 						+ edge.getTarget().getType().getName()

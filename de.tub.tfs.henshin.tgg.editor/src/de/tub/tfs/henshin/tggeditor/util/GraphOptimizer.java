@@ -27,6 +27,7 @@ import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 public class GraphOptimizer implements Comparator<Node>{
 
@@ -103,7 +104,7 @@ public class GraphOptimizer implements Comparator<Node>{
 			TripleComponent node0 = NodeUtil.guessTripleComponent((TNode) arg0);
 			TripleComponent node1 = NodeUtil.guessTripleComponent((TNode) arg1);
 			TripleComponent target = null;
-			String ruleMarkerType=rule.getMarkerType();
+			String ruleMarkerType=TggUtil.getElemMarker(rule);
 			if(ruleMarkerType.equals(RuleUtil.TGG_FT_RULE))
 				target=TripleComponent.SOURCE;
 			if (ruleMarkerType.equals(RuleUtil.TGG_CC_RULE)){
@@ -154,14 +155,14 @@ public class GraphOptimizer implements Comparator<Node>{
 	
 	private int getMajorConstraintCount(Node node){
 		TripleComponent target = null;
-		if (rule.getMarkerType().equals(RuleUtil.TGG_FT_RULE))
+		if (RuleUtil.TGG_FT_RULE.equals(TggUtil.getElemMarker(rule)))
 			target = TripleComponent.SOURCE;
-		if (rule.getMarkerType().equals(RuleUtil.TGG_BT_RULE))
+		else if (RuleUtil.TGG_BT_RULE.equals(TggUtil.getElemMarker(rule)))
 			target = TripleComponent.TARGET;
-		if (rule.getMarkerType().equals(RuleUtil.TGG_CC_RULE))
+		else if (RuleUtil.TGG_CC_RULE.equals(TggUtil.getElemMarker(rule)))
 			target = TripleComponent.SOURCE;
 		//NEW
-		if (rule.getMarkerType().equals(RuleUtil.TGG_IT_RULE))
+		else if (RuleUtil.TGG_IT_RULE.equals(TggUtil.getElemMarker(rule)))
 			target = TripleComponent.SOURCE;
 		
 		if (TripleComponent.CORRESPONDENCE.equals(NodeUtil.guessTripleComponent((TNode) node))){

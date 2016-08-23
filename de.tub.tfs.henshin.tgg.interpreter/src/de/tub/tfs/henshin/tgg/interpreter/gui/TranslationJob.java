@@ -29,8 +29,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
-import javax.script.ScriptException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -57,13 +57,13 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EContentsEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.henshin.interpreter.Engine;
-import org.eclipse.emf.henshin.model.Annotation;
 import org.eclipse.emf.henshin.model.IndependentUnit;
 import org.eclipse.emf.henshin.model.Module;
 import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.emf.henshin.model.Unit;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
@@ -84,6 +84,9 @@ import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 //}
 
 public class TranslationJob extends Job {
+	
+	private static final Logger LOG = Logger.getLogger(TranslationJob.class);
+	
 	public static String DEFAULT_EXT = "out"; 
 	protected String targetExt = "";
 
@@ -158,8 +161,8 @@ public class TranslationJob extends Job {
 			ExecutionTimes executionTimes = new ExecutionTimes();
 			try {
 				monitor.beginTask("Translating " + inputURI.lastSegment(), 3);
-				System.out.println("=====");
-				System.out.println("Translating: " + inputURI.lastSegment());
+				LOG.info("=====");
+				LOG.info("Translating: " + inputURI.lastSegment());
 				long time0 = System.currentTimeMillis();
 				monitor.subTask("Loading input");
 				ResourceSet resSet = new ResourceSetImpl();
@@ -248,7 +251,7 @@ public class TranslationJob extends Job {
 				
 				long time1 = System.currentTimeMillis();
 				long stage1 = time1 - time0;
-				System.out.println("Stage 1 -- Loading: " + stage1 + " ms");
+				LOG.info("Stage 1 -- Loading: " + stage1 + " ms");
 				monitor.worked(1);
 				if (monitor.isCanceled()) {
 					monitor.done();
@@ -289,7 +292,7 @@ public class TranslationJob extends Job {
 						String trFileName = fileNames.get(modulePos);
 						monitor.subTask("Applying " + trFileName );
 						if (debug)
-							System.out.println("Applying " + trFileName);
+							LOG.info("Applying " + trFileName);
 
 
 						foundApplicationForModule = tggTransformation.applyRules(monitor,"Applying " + trFileName,debug);
@@ -308,8 +311,8 @@ public class TranslationJob extends Job {
 
 							trFileName = fileNames.get(i);
 							monitor.subTask("Applying " + trFileName );
-							if (debug)
-								System.out.println("Applying " + trFileName);
+							if (LOG.isDebugEnabled())
+								LOG.debug("Applying " + trFileName);
 
 
 							foundApplicationForModule = tggTransformation.applyRules(monitor,"Applying " + trFileName,debug);
@@ -323,8 +326,7 @@ public class TranslationJob extends Job {
 					}
 
 					if (!initialRound && foundApplicationForRound)
-						System.out
-								.println("Warning: some ruleapplications depend on rules that are applied in a subsequent module. This can cause inefficient executions. "
+						LOG.warn("Warning: some ruleapplications depend on rules that are applied in a subsequent module. This can cause inefficient executions. "
 										+ "Try to reorder the modules or rules.");
 
 					
@@ -359,7 +361,7 @@ public class TranslationJob extends Job {
 				}
 				long time2 = System.currentTimeMillis();
 				long stage2 = time2 - time1;
-				System.out.println("Stage 2 -- Transformation: " + stage2 + " ms");
+				LOG.info("Stage 2 -- Transformation: " + stage2 + " ms");
 				monitor.subTask("Saving result");
 				List<EObject> roots = tggTransformation.getGraph().getRoots();
 
@@ -375,7 +377,7 @@ public class TranslationJob extends Job {
 						if (targetClassScript.startsWith("{*")){
 							targetClassScript = targetClassScript.substring(2,targetClassScript.length() - 2);
 						}
-						targetClass = (Class) emfEngine.getScriptEngine().eval(targetClassScript);
+						targetClass = (Class<?>) emfEngine.getScriptEngine().eval(targetClassScript);
 						
 					} catch (Throwable e) {
 						e.printStackTrace();
@@ -445,7 +447,7 @@ public class TranslationJob extends Job {
 						Export.saveTargetModel(resSet, targetRoot, outputURI,postProcessorFactories,inputURI,sharedObjectRegistry);
 					}
 				} else {
-					System.out.println("No target root!");
+					LOG.warn("No target root!");
 				}
 				monitor.worked(1);
 				if(useOutputFolder){
@@ -462,7 +464,7 @@ public class TranslationJob extends Job {
 						Path path = Paths.get(file.getLocation().toString());
 						Charset charset = StandardCharsets.UTF_8;
 						String content = new String(Files.readAllBytes(path), charset);
-						CodeFormatter cf = new DefaultCodeFormatter();
+						CodeFormatter cf = ToolFactory.createCodeFormatter(JavaCore.getOptions());
 						TextEdit te = cf.format(CodeFormatter.K_UNKNOWN, content, 0, content.length(), 0, null);
 						IDocument dc = new Document(content);
 						te.apply(dc);
@@ -473,7 +475,7 @@ public class TranslationJob extends Job {
 				}
 				long time3 = System.currentTimeMillis();
 				long stage3 = time3 - time2;
-				System.out.println("Stage 3 -- Saving: " + stage3 + " ms");
+				LOG.info("Stage 3 -- Saving: " + stage3 + " ms");
 				executionTimes.stage1=stage1;
 				executionTimes.stage2=stage2;
 				executionTimes.stage3=stage3;

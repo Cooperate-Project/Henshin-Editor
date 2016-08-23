@@ -12,6 +12,7 @@ package de.tub.tfs.henshin.tgg.interpreter.impl;
 
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.henshin.interpreter.matching.constraints.DomainSlot;
@@ -23,6 +24,7 @@ import org.eclipse.emf.henshin.model.Rule;
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 
 /**
@@ -33,6 +35,7 @@ import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
  */
 public class OpRuleAttributeConstraintEMF implements UnaryConstraint {
 
+	private static final Logger LOG = Logger.getLogger(OpRuleAttributeConstraintEMF.class);
 	/**
 	 * Hashmap with the attribute markers that is updated during the execution of the operational rules 
 	 */
@@ -83,10 +86,10 @@ public class OpRuleAttributeConstraintEMF implements UnaryConstraint {
 			boolean nullValueMatching) {
 		
 		this.ruleTNode = (TNode)attr.getNode();
-		this.ruleNodeMarker=ruleTNode.getMarkerType();
+		this.ruleNodeMarker = TggUtil.getElemMarker(ruleTNode);
 		
 		this.ruleAttr = (TAttribute)attr;
-		ruleAttrMarker = ruleAttr.getMarkerType();
+		ruleAttrMarker = TggUtil.getElemMarker(ruleAttr);
 		this.isTranslatedNodeMap = isTranslatedMap;
 		this.isTranslatedAttributeMap = isTranslatedAttributeMap;
 		this.eAttribute = attr.getType();
@@ -180,7 +183,7 @@ public class OpRuleAttributeConstraintEMF implements UnaryConstraint {
 		}
 
 		// unknown case: should not occur
-		System.out.println("ERROR: during matching - checking of attribute markers failed.");
+		LOG.error("ERROR: during matching - checking of attribute markers failed.");
 		return false;
 	}
 

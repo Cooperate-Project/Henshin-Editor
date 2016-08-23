@@ -22,6 +22,7 @@ import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 
 /**
@@ -83,8 +84,12 @@ public class CreateRuleCommand extends Command {
 		rule.setLhs(lhs);
 		rule.setRhs(rhs);
 		// mark as original rule from the tgg
-		((TGGRule) rule).setMarkerType(RuleUtil.TGG_RULE);
-		((TGGRule) rule).setIsMarked(true);
+		
+		TggUtil.setElemMarker(rule, RuleUtil.TGG_RULE);
+		//((TGGRule) rule).setMarkerType(RuleUtil.TGG_RULE);
+		
+		//TggUtil.addElemAnnotation(rule, RuleUtil.IS_MARKER, "true");
+		//((TGGRule) rule).setIsMarked(true);
 	}
 
 	/* (non-Javadoc)

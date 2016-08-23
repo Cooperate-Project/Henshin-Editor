@@ -35,6 +35,9 @@ import de.tub.tfs.henshin.tgg.TripleGraph;
 
 public class RuleUtil {
 	
+//	public final static String MARKER_TYPE = "tgg:mtype";//TODOD: change value 
+//	public final static String IS_MARKER = "tgg:ismarked";//TODOD: change value 
+//	
 	/** description of an original triple rule of the TGG  */
 	public final static String TGG_RULE = "tgg";
 	/** description of a derived forward translation rule of the TGG  */
@@ -418,7 +421,7 @@ public class RuleUtil {
 		EObject container = graph.eContainer();
 		if (container instanceof TGGRule)
 			rule = (TGGRule) container;
-		if (rule==null || RuleUtil.TGG_RULE.equals(rule.getMarkerType()))
+		if (rule==null || RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(rule)))
 			return false;
 		return true;
 

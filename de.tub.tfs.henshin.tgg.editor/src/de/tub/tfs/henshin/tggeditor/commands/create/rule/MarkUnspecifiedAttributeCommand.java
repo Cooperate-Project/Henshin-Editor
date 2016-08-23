@@ -16,6 +16,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 /**
  * The class MarkAttributeCommand can mark an attribute in a rule as new or not new. It makes
@@ -44,15 +45,17 @@ public class MarkUnspecifiedAttributeCommand extends CompoundCommand {
 	 */
 	@Override
 	public void execute() {
-		if (RuleUtil.TR_UNSPECIFIED.equals(((TAttribute) rhsAttribute)
-				.getMarkerType())) {
+		if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(rhsAttribute))) {
 			// attribute is currently marked and shall be demarked
 			// remove marker
-			((TAttribute) rhsAttribute).setMarkerType(null);
+			TggUtil.setElemMarker(rhsAttribute, null);
+
+			//((TAttribute) rhsAttribute).setMarkerType(null);
 
 		} else {
 			// attribute is currently not marked, thus mark it
-			((TAttribute) rhsAttribute).setMarkerType(RuleUtil.TR_UNSPECIFIED);
+			TggUtil.setElemMarker(rhsAttribute, RuleUtil.TR_UNSPECIFIED);
+			// ((TAttribute) rhsAttribute).setMarkerType(RuleUtil.TR_UNSPECIFIED);
 		}
 	}
 

@@ -28,6 +28,7 @@ import org.eclipse.draw2d.ColorConstants;
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TggPackage;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.editparts.graphical.AttributeEditPart;
 import de.tub.tfs.henshin.tggeditor.editparts.graphical.RuleObjectTextWithMarker;
 import de.tub.tfs.henshin.tggeditor.editpolicies.graphical.AttributeGraphicalEditPolicy;
@@ -77,7 +78,7 @@ public class RuleAttributeEditPart extends AttributeEditPart {
 			
 		
 		// remove lhs attribute, if rule creates the attribute
-		if(RuleUtil.NEW.equals(tAttribute.getMarkerType()) ){
+		if(RuleUtil.NEW.equals(TggUtil.getElemMarker(tAttribute)) ){
 			if (lhsAttributesList.size()==1) 
 			{
 				Attribute lhsAttribute = lhsAttributesList.get(0);
@@ -112,7 +113,7 @@ public class RuleAttributeEditPart extends AttributeEditPart {
 
 	private void updateLHSAttribute() {
 		// updates the lhs attribute value if the lhs attribute exists and its value differs from the rhs attribute value
-		if (!(RuleUtil.NEW.equals(tAttribute.getMarkerType())) ) {
+		if (!(RuleUtil.NEW.equals(TggUtil.getElemMarker(tAttribute))) ) {
 			Attribute lhsAttribute = RuleUtil.getLHSAttribute(tAttribute);
 			if (lhsAttribute!=null
 					// lhs attribute has a different value as the rhs attribute

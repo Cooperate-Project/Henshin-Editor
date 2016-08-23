@@ -560,8 +560,7 @@ private void updateLHSAttribute(TAttribute rhsAttribute) {
 	// updates the lhs attribute value if the lhs attribute exists and its value differs from the rhs attribute value
 	// if attribute is not created by the rule, then update the corresponding value in LHS as well
 	
-	if (rhsAttribute.getMarkerType() == null 
-			|| !rhsAttribute.getMarkerType().equals(RuleUtil.NEW)) {
+	if (!RuleUtil.NEW.equals(TggUtil.getElemMarker(rhsAttribute))) {
 		Attribute lhsAttribute = RuleUtil.getLHSAttribute(rhsAttribute);
 		if (lhsAttribute!=null
 				// lhs attribute has a different value as the rhs attribute

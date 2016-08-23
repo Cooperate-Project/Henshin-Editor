@@ -19,6 +19,7 @@ import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 /**
  * The Class ExecutionInitCommand creates the initial marking for executing the operational rules on a given graph. 
@@ -80,28 +81,31 @@ public abstract class ExecutionInitCommand extends CompoundCommand {
 	}
 
 	private void initMarkers(TNode tNode, String marker) {
-		tNode.setMarkerType(marker);
+		TggUtil.setElemMarker(tNode, marker);
 
 		// handle attributes
 		for (Attribute a : tNode.getAttributes()) {
-			((TAttribute) a).setMarkerType(marker);
+			TggUtil.setElemMarker(a, marker);
 		}
 
 		// handle edges
 		if (marker == null) {
 			// node shall not be marked
 			for (Edge e : tNode.getOutgoing()) {
-				((TEdge) e).setMarkerType(marker);
+				TggUtil.setElemMarker(e, marker);
+				//((TEdge) e).setMarkerType(marker);
 			}
 		} else { // node shall be marked
 			for (Edge e : tNode.getOutgoing()) {
 				if (isInMarkedComponent((TNode)e.getTarget()))
 					// source and target nodes of edge are in marked component
-					((TEdge) e).setMarkerType(marker);
+					TggUtil.setElemMarker(e, marker);
+					//((TEdge) e).setMarkerType(marker);
 				else
 					// target node shall not be marked, thus edge shall not be
 					// marked
-					((TEdge) e).setMarkerType(null);
+					TggUtil.setElemMarker(e, null);
+					//((TEdge) e).setMarkerType(null);
 			}
 		}
 	}

@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.GenerateOpRuleCommand;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.ProcessRuleCommand;
 import de.tub.tfs.henshin.tggeditor.commands.delete.DeleteFoldercommand;
@@ -115,8 +116,7 @@ public abstract class GenerateOpRulesAction extends SelectionAction {
 	                            if (unit == null) 
 	                            	return false;
 	                            if (unit instanceof TGGRule &&
-	                            		!RuleUtil.TGG_RULE.equals(((TGGRule) unit)
-	                                    .getMarkerType()))
+	                            		!RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(unit)))
 	                            	return false;
 	                        }
 						  return true;

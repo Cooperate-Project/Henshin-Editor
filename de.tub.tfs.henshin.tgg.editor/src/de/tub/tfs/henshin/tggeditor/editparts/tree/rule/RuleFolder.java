@@ -19,6 +19,7 @@ import org.eclipse.emf.henshin.model.Rule;
 
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.util.ModelUtil;
 
 
@@ -41,7 +42,7 @@ public class RuleFolder extends EObjectImpl {
 		rules = new ArrayList<Rule>();
 		List<TGGRule> allRules = (List) ModelUtil.getRules(this.sys);
 		for(TGGRule r: allRules){
-			if(r.getMarkerType()==null || r.getMarkerType().equals(RuleUtil.TGG_RULE))
+			if(TggUtil.getElemMarker(r)==null || RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(r)))
 			{
 				rules.add(r);
 			}			

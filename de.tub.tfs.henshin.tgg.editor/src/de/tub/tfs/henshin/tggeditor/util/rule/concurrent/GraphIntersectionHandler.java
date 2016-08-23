@@ -29,6 +29,7 @@ import org.eclipse.emf.henshin.model.impl.MappingListImpl;
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
 import de.tub.tfs.henshin.tggeditor.util.rule.copy.Graph2GraphCopyMappingList;
 
@@ -411,7 +412,7 @@ private boolean isIntersectingNodes(Node nodeLRuleL, Node nodeLRuleR, boolean ad
 		 Node nodeL = rule.getMappings().getOrigin(nodeR);
 		 if (nodeL==null){
 			for(Attribute aR: nodeR.getAttributes()){
-				 ((TAttribute)aR).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(aR, RuleUtil.NEW);
 			 }
 		 }else{
 			 for (Attribute aR : nodeR.getAttributes()){
@@ -420,14 +421,14 @@ private boolean isIntersectingNodes(Node nodeLRuleL, Node nodeLRuleR, boolean ad
 					 if (aL.getType().getName().equals(aR.getType().getName())){
 						 if (this.corresponds(aL, aR)){
 							 
-							 ((TAttribute)aR).setMarkerType(null);
+							 TggUtil.setElemMarker(aR, null);
 							 aLFound = true;
 							 break;
 						 }
 					 }
 				 }
 				 if (!aLFound){
-					 ((TAttribute)aR).setMarkerType(RuleUtil.NEW);
+					 TggUtil.setElemMarker(aR, RuleUtil.NEW);
 				 }
 			 }
 		 }

@@ -34,6 +34,7 @@ import org.eclipse.swt.graphics.Color;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.editparts.graphical.RuleObjectTextWithMarker;
 import de.tub.tfs.henshin.tggeditor.editparts.graphical.TextWithMarker;
 import de.tub.tfs.henshin.tggeditor.ui.TGGEditorConstants;
@@ -140,22 +141,22 @@ public class NodeFigure extends Figure {
 	}
 	public void updateMarker() {
 		// add marker according to marker type
-		labelWithMarker.setMarker(node.getMarkerType());
+		labelWithMarker.setMarker(TggUtil.getElemMarker(node));
 		// shrink rectangle to best fit
 		labelWithMarker.setSize(labelWithMarker.getPreferredSize());
 		r.setSize(labelWithMarker.getBounds().width, 2);
 		
-		if (node.getMarkerType() == null){ // no marker is available
+		if (TggUtil.getElemMarker(node) == null){ // no marker is available
 			border.setColor(TGGEditorConstants.BORDER_DEFAULT_COLOR);
 		}
 		else {
 			// marker is available
 
 			// instance graph after executing a translation
-			if (node.getMarkerType().equals(RuleUtil.Translated_Graph)) {
+			if (TggUtil.getElemMarker(node).equals(RuleUtil.Translated_Graph)) {
 				border.setColor(TGGEditorConstants.BORDER_TRANSLATED_COLOR);
 			} else
-			if (node.getMarkerType().equals(RuleUtil.Not_Translated_Graph)) {
+			if (TggUtil.getElemMarker(node).equals(RuleUtil.Not_Translated_Graph)) {
 				border.setColor(TGGEditorConstants.BORDER_NOT_TRANSLATED_COLOR);
 			}
 		}

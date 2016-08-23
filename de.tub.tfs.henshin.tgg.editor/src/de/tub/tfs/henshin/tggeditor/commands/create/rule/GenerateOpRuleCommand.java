@@ -32,6 +32,7 @@ import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tggeditor.util.AttributeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.util.AttributeUtil;
 
 public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
@@ -55,7 +56,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 
 			Node ruleTNode = newNode;
 			// case: node is marked to be created by the TGG rule, thus it shall be translated by the FT rule
-			if (RuleUtil.NEW.equals(((TNode)oldNodeRHS).getMarkerType())){
+			if (RuleUtil.NEW.equals(TggUtil.getElemMarker(oldNodeRHS))){
 				Node tNodeLHS = copyNodePure(oldNodeRHS, newNode.getGraph().getRule().getLhs());
 
 				setNodeLayoutAndMarker(ruleTNode, oldNodeRHS,
@@ -71,7 +72,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 				for (Attribute oldAttribute : oldNodeRHS.getAttributes()) {
 
 					newAttRHS = (TAttribute) getCopiedObject(oldAttribute);
-					if (RuleUtil.NEW.equals(newAttRHS.getMarkerType())){
+					if (RuleUtil.NEW.equals(TggUtil.getElemMarker(newAttRHS))){
 						newAttLHS = (TAttribute) copyAtt(oldAttribute, tNodeLHS);
 						AttributeUtil.setAttributeMarker(newAttRHS, RuleUtil.Translated);
 						// marker needed for matching constraint
@@ -96,7 +97,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 				TNode tNodeLHS = (TNode) RuleUtil.getLHSNode(ruleTNode);
 				// case: node is in NAC
 				if (tNodeLHS == null) {
-					if (RuleUtil.TR_UNSPECIFIED.equals(((TNode)oldNodeRHS).getMarkerType())){
+					if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(oldNodeRHS))){
 							setNodeMarker(ruleTNode, RuleUtil.TR_UNSPECIFIED);				
 					}
 					else{
@@ -106,8 +107,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 							tAttributeRHS = (TAttribute) getCopiedObject(attr);
 							tAttributeLHS = (TAttribute) RuleUtil.getLHSAttribute(tAttributeRHS);
 							// case: attribute in NAC has marker "unspecified"
-							if (RuleUtil.TR_UNSPECIFIED.equals(tAttributeRHS
-									.getMarkerType())){
+							if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(tAttributeRHS))){
 								AttributeUtil.setAttributeMarker(tAttributeRHS,
 										RuleUtil.TR_UNSPECIFIED);
 							}
@@ -132,7 +132,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 				for (Attribute attr : oldNodeRHS.getAttributes()) {
 					tAttributeRHS = (TAttribute) getCopiedObject(attr);
 					// case: attribute is created by the TGG rule
-					if (RuleUtil.NEW.equals(((TAttribute)attr).getMarkerType())){
+					if (RuleUtil.NEW.equals(TggUtil.getElemMarker(attr))){
 						newAttLHS = (TAttribute) copyAtt(attr, RuleUtil.getLHSNode((Node) tAttributeRHS.eContainer()));
 						AttributeUtil.setAttributeMarker(tAttributeRHS, RuleUtil.Translated);
 						// marker needed for matching constraint
@@ -269,7 +269,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		
 			// case: edge is marked to be created by the TGG rule, thus it
 			// shall be translated by the FT rule
-			if (RuleUtil.NEW.equals(((TEdge) oldEdge).getMarkerType())) {
+			if (RuleUtil.NEW.equals(TggUtil.getElemMarker(oldEdge))) {
 				setEdgeMarker(newEdge, RuleUtil.Translated);
 
 				// LHS
@@ -290,8 +290,8 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 			// case: edge is not created by the TGG rule
 			else {
 				// case: edge is in NAC and has an unspecified marker
-				if (RuleUtil.TR_UNSPECIFIED.equals(newTEdge.getMarkerType()))
-					newTEdge.setMarkerType(RuleUtil.TR_UNSPECIFIED);
+				if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(newTEdge))) //TODO: This is useless
+					TggUtil.setElemMarker(newTEdge, RuleUtil.TR_UNSPECIFIED);
 				else {
 					// mark the edge to be translated already
 					setEdgeMarker(newEdge, RuleUtil.Translated_Graph);

@@ -19,6 +19,7 @@ import org.eclipse.gef.commands.Command;
 import de.tub.tfs.henshin.tggeditor.util.rule.concurrent.ConcurrentRuleComparator;
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 /**
  * The InsertConcurrentRuleCommand inserts a concurrent rule in the rule folder.
  * @author Gérard Kirpach
@@ -47,11 +48,14 @@ public void execute() {
 	if ((parentFolderUnit == null) || (transSystem == null)) {
 		return;
 	}
+	
 	// set rule marker to indicate that the new concurrent rule becomes a rule of the TGG
-	if(newConRule instanceof TGGRule){
-		TGGRule tggRule = (TGGRule) newConRule;
-		tggRule.setMarkerType(RuleUtil.TGG_RULE);
-	}
+	TggUtil.setElemMarker(newConRule, RuleUtil.TGG_RULE);
+
+//	if(newConRule instanceof TGGRule){
+//		TGGRule tggRule = (TGGRule) newConRule;
+//		//tggRule.setMarkerType(RuleUtil.TGG_RULE);
+//	}
 
 	EList<Unit> subUnits = parentFolderUnit.getSubUnits();
 	int position = subUnits.size() - 1;

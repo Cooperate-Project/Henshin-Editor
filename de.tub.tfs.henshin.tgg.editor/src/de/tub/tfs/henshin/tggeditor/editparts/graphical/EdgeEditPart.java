@@ -26,6 +26,7 @@ import org.eclipse.gef.EditPolicy;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TggPackage;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.editpolicies.graphical.EdgeComponentEditPolicy;
 import de.tub.tfs.henshin.tggeditor.editpolicies.graphical.EdgeEndpointEditPartPolicy;
 import de.tub.tfs.henshin.tggeditor.ui.TGGEditorConstants;
@@ -92,13 +93,13 @@ public class EdgeEditPart extends AdapterConnectionEditPart<Edge> {
 	private void updateLabel(){
 		Edge edge = getCastedModel();
 		if (edge!=null){
-			labelWithMarker.setMarker(((TEdge)edge).getMarkerType());
+			labelWithMarker.setMarker(TggUtil.getElemMarker(edge));
 			if (edge.getType() != null) {
 			labelWithMarker.setText(edge.getType().getName());
 			
 			// update color after FT execution
-			if((RuleUtil.Translated_Graph.equals(((TEdge) edge).getMarkerType()))
-				|| (RuleUtil.Not_Translated_Graph.equals(((TEdge) edge).getMarkerType())))
+			if((RuleUtil.Translated_Graph.equals(TggUtil.getElemMarker(edge)))
+				|| (RuleUtil.Not_Translated_Graph.equals(TggUtil.getElemMarker(edge))))
 			{
 				labelWithMarker.text.setBorder(new LineBorder());
 			}

@@ -22,6 +22,7 @@ import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.create.CreateEdgeCommand;
 
 
@@ -69,7 +70,7 @@ public class CreateRuleEdgeCommand extends CreateEdgeCommand {
 		super.execute();
 	
 		rule = graph.getRule();
-		((TEdge) edge).setMarkerType(RuleUtil.NEW);
+		TggUtil.setElemMarker(edge, RuleUtil.NEW);
 
 		Mapping sourceMapping = RuleUtil.getRHSNodeMapping(sourceNode);
 		Mapping targetmapping = RuleUtil.getRHSNodeMapping(targetNode);
@@ -81,7 +82,7 @@ public class CreateRuleEdgeCommand extends CreateEdgeCommand {
 			this.lhsEdge.setSource(sourceMapping.getOrigin());
 			this.lhsEdge.setTarget(targetmapping.getOrigin());
 			this.lhsEdge.setType(typeReference);
-			((TEdge) edge).setMarkerType(null);
+			TggUtil.setElemMarker(edge, null);
 			
 
 			lhsGraph = (TripleGraph) rule.getLhs();
@@ -89,7 +90,7 @@ public class CreateRuleEdgeCommand extends CreateEdgeCommand {
 			lhsGraph.getEdges().add(this.lhsEdge);
 		}
 		else { // edge is put into RHS as a new edge created by the rule
-			((TEdge) edge).setMarkerType(RuleUtil.NEW);
+			TggUtil.setElemMarker(edge, RuleUtil.NEW);
 		}
 	}
 
@@ -99,7 +100,7 @@ public class CreateRuleEdgeCommand extends CreateEdgeCommand {
 	@Override
 	public void undo() {
 		super.undo();
-		if (!RuleUtil.NEW.equals(((TEdge) edge).getMarkerType())) {
+		if (!RuleUtil.NEW.equals(TggUtil.getElemMarker(edge))) {
 			lhsGraph.getEdges().remove(lhsEdge);
 			lhsEdge.getSource().getOutgoing().remove(lhsEdge);
 			lhsEdge.getTarget().getIncoming().remove(lhsEdge);

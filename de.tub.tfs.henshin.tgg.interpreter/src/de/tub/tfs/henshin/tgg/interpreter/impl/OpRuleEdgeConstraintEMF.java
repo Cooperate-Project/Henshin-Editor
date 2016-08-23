@@ -25,6 +25,7 @@ import org.eclipse.emf.henshin.model.Rule;
 
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 /**
  * This class is for checking the correct mapping in a execution cycle of
@@ -73,7 +74,7 @@ public class OpRuleEdgeConstraintEMF implements BinaryConstraint {
 		this.ruleEdge = (TEdge) edge;
 
 		assert(edge != null):EDGE_ERROR;
-		this.ruleEdgeMarker = ruleEdge.getMarkerType();
+		this.ruleEdgeMarker = TggUtil.getElemMarker(ruleEdge);
 		this.isTranslatedEdgeMap = isTranslatedEdgeMap;
 
 	}

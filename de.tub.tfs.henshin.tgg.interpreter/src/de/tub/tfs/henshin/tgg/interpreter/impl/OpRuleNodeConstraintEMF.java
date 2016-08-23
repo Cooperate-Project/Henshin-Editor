@@ -20,6 +20,7 @@ import org.eclipse.emf.henshin.model.Rule;
 
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 
 /**
@@ -71,7 +72,7 @@ public class OpRuleNodeConstraintEMF implements UnaryConstraint {
 	public OpRuleNodeConstraintEMF(Node ruleNode, 
 			HashMap<EObject, Boolean> isTranslatedMap) {
 		this.ruleTNode = (TNode)ruleNode;
-		this.ruleNodeMarker=ruleTNode.getMarkerType();
+		this.ruleNodeMarker=TggUtil.getElemMarker(ruleNode);
 		this.isTranslatedMap = isTranslatedMap;
 	}
 	

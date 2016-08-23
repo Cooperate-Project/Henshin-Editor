@@ -35,6 +35,7 @@ import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
 
 public class ConcurrentRuleUtil {
@@ -490,18 +491,18 @@ public class ConcurrentRuleUtil {
 				Node nL = rule.getMappings().getOrigin(nodeR);
 				Test.check(nL==nodeL);
 				if (nodeL == null) {
-					nodeR.setMarkerType(RuleUtil.NEW);
+					TggUtil.setElemMarker(nodeR, RuleUtil.NEW);
 				} else {
-					nodeR.setMarkerType(null);
+					TggUtil.setElemMarker(nodeR, null);
 				}
 				// handle attributes
 				for (Attribute at : nodeR.getAttributes()) {
 					TAttribute attR = (TAttribute) at;
 					Attribute attL = RuleUtil.getLHSAttribute(attR);
 					if (attL == null) {
-						attR.setMarkerType(RuleUtil.NEW);
+						TggUtil.setElemMarker(attR, RuleUtil.NEW);
 					} else {
-						attR.setMarkerType(null);
+						TggUtil.setElemMarker(attR, null);
 					}
 				}
 			}
@@ -509,9 +510,9 @@ public class ConcurrentRuleUtil {
 				TEdge edgeR = (TEdge) ed;
 				Edge edgeL = RuleUtil.getLHSEdge(edgeR);
 				if (edgeL == null) {
-					edgeR.setMarkerType(RuleUtil.NEW);
+					TggUtil.setElemMarker(edgeR, RuleUtil.NEW);
 				} else {
-					edgeR.setMarkerType(null);
+					TggUtil.setElemMarker(edgeR, null);
 				}
 			}
 		}

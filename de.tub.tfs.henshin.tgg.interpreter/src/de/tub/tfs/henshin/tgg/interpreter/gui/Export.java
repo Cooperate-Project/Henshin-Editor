@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -32,10 +33,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 
+
 import de.tub.tfs.henshin.tgg.interpreter.postprocessing.AbstractPostProcessor;
 import de.tub.tfs.henshin.tgg.interpreter.postprocessing.AbstractPostProcessorFactory;
 
 public class Export {
+	private static final Logger LOG = Logger.getLogger(Export.class);
 
 	public Export() {
 		// TODO Auto-generated constructor stub
@@ -90,7 +93,7 @@ public class Export {
 					out.close();
 				} catch (Exception ex){
 					exit = false;
-					System.out.println("Failed to open " + f);
+					LOG.error("Failed to open " + f, ex);
 				}		
 			}
 			in.close();

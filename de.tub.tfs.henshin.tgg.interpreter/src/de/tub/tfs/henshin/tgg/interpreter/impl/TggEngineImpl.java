@@ -9,8 +9,7 @@
  *     TU Berlin, University of Luxembourg, SES S.A.
  *******************************************************************************/
 package de.tub.tfs.henshin.tgg.interpreter.impl;
-import java.io.ObjectOutputStream.PutField;
-
+import org.apache.log4j.Logger;
 import org.eclipse.emf.henshin.interpreter.EGraph;
 import org.eclipse.emf.henshin.interpreter.Match;
 import org.eclipse.emf.henshin.interpreter.impl.EngineImpl;
@@ -22,6 +21,9 @@ import de.tub.tfs.henshin.tgg.interpreter.TggEngine;
 import de.tub.tfs.henshin.tgg.interpreter.TggTransformation;
 
 public class TggEngineImpl extends EngineImpl implements TggEngine {
+	
+	private static final Logger LOG = Logger.getLogger(TggEngine.class);
+	
 	/**
 	 * 
 	 */
@@ -95,7 +97,7 @@ public class TggEngineImpl extends EngineImpl implements TggEngine {
 	}
 
 	public void updateOptions() {
-		System.out.println("Setting inverse mathcing to " + invertMatchingOrder);
+		LOG.info("Setting inverse matching to " + invertMatchingOrder);
 		inverseMatchingOrder = invertMatchingOrder;
 		getOptions().put(OPTION_INVERSE_MATCHING_ORDER, invertMatchingOrder);
 	}

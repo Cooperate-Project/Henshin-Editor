@@ -18,6 +18,7 @@ import de.tub.tfs.henshin.tgg.EdgeLayout;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.muvitor.commands.SimpleDeleteEObjectCommand;
 
 
@@ -99,7 +100,7 @@ public class EdgeUtil {
 		if (1==1)
 			return;
 		// marker value is not available in ruleAttributeRHS, thus compute it
-		if (RuleUtil.Translated.equals(((TEdge)ruleEdgeRHS).getMarkerType())){
+		if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleEdgeRHS))){
 			return;
 		}
 		EdgeLayout edgeLayout = getEdgeLayout(ruleEdgeRHS);
@@ -109,17 +110,17 @@ public class EdgeUtil {
 //			if (ModelUtil.getRuleLayout(rule)!=null)
 //				ruleEdgeRHS.setMarkerType(RuleUtil.Translated);
 //			else
-				((TEdge) ruleEdgeRHS).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(ruleEdgeRHS, RuleUtil.NEW);
 
 			// check for existing edge in LHS
 			Edge lhsEdge = RuleUtil
 					.getLHSEdge(ruleEdgeRHS);
 			if (lhsEdge != null) {
 				// edge is preserved -> no marker
-				((TEdge) ruleEdgeRHS).setMarkerType(null);
+				TggUtil.setElemMarker(ruleEdgeRHS, null);
 			} else {
 				// edge is created -> add marker
-				((TEdge) ruleEdgeRHS).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(ruleEdgeRHS, RuleUtil.NEW);
 			}
 
 		} else { // edge layout is found
@@ -127,14 +128,14 @@ public class EdgeUtil {
 			boolean isNew = edgeLayout.isNew();
 			if (isTranslatedLHS == null) {
 				if (isNew)
-					((TEdge) ruleEdgeRHS).setMarkerType(RuleUtil.NEW);
+					TggUtil.setElemMarker(ruleEdgeRHS, RuleUtil.NEW);
 				else
-					((TEdge) ruleEdgeRHS).setMarkerType(null);
+					TggUtil.setElemMarker(ruleEdgeRHS, null);
 			} else {
 				if (isTranslatedLHS){
-					((TEdge) ruleEdgeRHS).setMarkerType(null);
+					TggUtil.setElemMarker(ruleEdgeRHS, null);
 				} else {
-					((TEdge) ruleEdgeRHS).setMarkerType(RuleUtil.Translated);
+					TggUtil.setElemMarker(ruleEdgeRHS, RuleUtil.Translated);
 				}
 				
 			}

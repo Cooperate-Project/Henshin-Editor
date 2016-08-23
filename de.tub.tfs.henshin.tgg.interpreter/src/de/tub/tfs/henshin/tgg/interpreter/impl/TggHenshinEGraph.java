@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -37,6 +38,9 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 	
 	// Generated serial ID
 	private static final long serialVersionUID = -2408288653525326829L;
+	
+	private static final Logger LOG = Logger.getLogger(TggHenshinEGraph.class);
+
 
 	// The Henshin graph:
 	protected final Graph henshinGraph;
@@ -91,7 +95,7 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 					add(eObject);
 				}
 			} catch (Exception ex){
-				ex.printStackTrace();
+				LOG.error("Error: ", ex);
 			}
 
 			for (Attribute attr : node.getAttributes()) {
@@ -107,17 +111,17 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 						try {
 							attrValues.add(attrValue);
 						} catch (Exception ex){
-
+							LOG.error("Error: ", ex);
 						}
 					} else {
 						try {
 							eObject.eSet(attrType,
 									EcoreUtil.createFromString(attrType.getEAttributeType(), attrValue));
+						} catch (IllegalArgumentException ex){
+								LOG.error("Error in graph: attribute value is invalid. Trying to instantiate attribute "+ attrType.getName() + ":" + attrType.getEAttributeType().getName()   
+										+ " with value " + attrValue + ".", ex);
 						} catch (Exception ex){
-							if (ex instanceof IllegalArgumentException)
-								System.out.println("Error in graph: attribute value is invalid. Trying to instantiate attribute "+ attrType.getName() + ":" + attrType.getEAttributeType().getName()   
-										+ " with value " + attrValue + ".");
-							ex.printStackTrace();
+								LOG.error("Error: ", ex);
 						}
 
 					}

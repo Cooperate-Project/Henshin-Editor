@@ -19,6 +19,7 @@ import org.eclipse.emf.henshin.model.Rule;
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TripleGraph;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 public class Test {
 	static boolean debug = true;
@@ -53,7 +54,7 @@ public class Test {
 				origin+= "-->";
 			}
 			r+="["+origin+n.getType().getName()+"; ";
-			r+=""+((TNode)n).getMarkerType()+": Attributes="+getAttributesRepresentation(n)+"]";
+			r+=""+TggUtil.getElemMarker(n)+": Attributes="+getAttributesRepresentation(n)+"]";
 		}
 		out(r);
 	}
@@ -63,7 +64,7 @@ public class Test {
 		for (Attribute att : node.getAttributes()){
 			r+= att.getType().getName()+"="+att.getValue();
 			r+="|";
-			r+=((TAttribute)att).getMarkerType();
+			r+=TggUtil.getElemMarker(att);
 			r+="; ";
 		}
 		return r+=")";

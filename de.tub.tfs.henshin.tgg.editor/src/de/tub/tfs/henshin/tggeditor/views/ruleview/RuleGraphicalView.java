@@ -11,6 +11,7 @@
 package de.tub.tfs.henshin.tggeditor.views.ruleview;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.henshin.model.ModelElement;
 import org.eclipse.emf.henshin.model.NamedElement;
 import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.jface.action.IToolBarManager;
@@ -19,6 +20,7 @@ import org.eclipse.ui.part.IPage;
 
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.TreeEditor;
 import de.tub.tfs.henshin.tggeditor.actions.create.rule.GenerateBTRuleToolBarAction;
 import de.tub.tfs.henshin.tggeditor.actions.create.rule.GenerateCCRuleToolBarAction;
@@ -55,8 +57,8 @@ public class RuleGraphicalView extends MuvitorPageBookView {
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		
 		boolean addTGGRuleActions = true;
-		if (forModel != null && forModel instanceof TGGRule) {
-			if (RuleUtil.TGG_RULE.equals(((TGGRule) forModel).getMarkerType()))
+		if (forModel != null && forModel instanceof ModelElement) {
+			if (RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker((ModelElement) forModel)))
 				addTGGRuleActions = false;
 		}
 		if(addTGGRuleActions) {

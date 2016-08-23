@@ -33,6 +33,7 @@ import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.MarkCommand;
 import de.tub.tfs.muvitor.commands.SimpleDeleteEObjectCommand;
 import de.tub.tfs.muvitor.ui.IDUtil;
@@ -72,15 +73,18 @@ public class TGGEditorMarkerResolutionGenerator implements IMarkerResolutionGene
 										return;
 									}
 									if (n instanceof TNode){
-										((TNode)n).setMarkerType(RuleUtil.NEW);
+										TggUtil.setElemMarker((TNode)n, RuleUtil.NEW);
+										//((TNode)n).setMarkerType(RuleUtil.NEW);
 									}
 									if (n instanceof TEdge){
 										
-										((TEdge)n).setMarkerType(RuleUtil.NEW);
+										TggUtil.setElemMarker((TEdge)n, RuleUtil.NEW);
+										//((TEdge)n).setMarkerType(RuleUtil.NEW);
 									}
 									if (n instanceof TAttribute){
 										
-										((TAttribute)n).setMarkerType(RuleUtil.NEW);
+										TggUtil.setElemMarker((TAttribute)n, RuleUtil.NEW);
+										//((TAttribute)n).setMarkerType(RuleUtil.NEW);
 									}
 									
 									marker.delete();
@@ -244,15 +248,17 @@ public class TGGEditorMarkerResolutionGenerator implements IMarkerResolutionGene
 										return;
 									}
 									if (n instanceof TNode){
-										((TNode)n).setMarkerType(null);
+										TggUtil.setElemMarker((TNode)n, RuleUtil.NEW);
+										//((TNode)n).setMarkerType(null);
 									}
 									if (n instanceof TEdge){
 										
-										((TEdge)n).setMarkerType(null);
+										TggUtil.setElemMarker((TEdge)n, RuleUtil.NEW);
+										//((TEdge)n).setMarkerType(null);
 									}
 									if (n instanceof TAttribute){
-										
-										((TAttribute)n).setMarkerType(null);
+										TggUtil.setElemMarker((TAttribute)n, RuleUtil.NEW);
+										//((TAttribute)n).setMarkerType(null);
 									}
 									
 									marker.delete();

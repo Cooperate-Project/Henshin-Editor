@@ -19,6 +19,7 @@ import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.delete.DeleteEdgeCommand;
 
 /**
@@ -55,15 +56,15 @@ public class MarkEdgeCommand extends CompoundCommand {
 	 */
 	@Override
 	public void execute() {
-		if (((TEdge) rhsEdge).getMarkerType()==null){
+		if (TggUtil.getElemMarker(rhsEdge)==null){
 			// reconstruct marker, if not present
 			Edge lhsEdge = RuleUtil.getLHSEdge(rhsEdge);
 			if (lhsEdge==null)
-				((TEdge) rhsEdge).setMarkerType(RuleUtil.NEW);
+				TggUtil.setElemMarker(rhsEdge, RuleUtil.NEW);
 			else
-				((TEdge) rhsEdge).setMarkerType(null);
+				TggUtil.setElemMarker(rhsEdge, null);
 		}
-		if (((TEdge) rhsEdge).getMarkerType() != null) {
+		if (TggUtil.getElemMarker(rhsEdge) != null) {
 			// edge is currently marked as new and shall be demarked
 
 			demark();
@@ -85,7 +86,7 @@ public class MarkEdgeCommand extends CompoundCommand {
 			// delete lhs edge
 			super.execute();
 			}
-		((TEdge) rhsEdge).setMarkerType(RuleUtil.NEW);
+		TggUtil.setElemMarker(rhsEdge, RuleUtil.NEW);
 	}
 
 	/**
@@ -99,12 +100,12 @@ public class MarkEdgeCommand extends CompoundCommand {
 
 			
 			// if some adjacent nodes are marked, then demark them first
-			if(((TNode) rhsSourceNode).getMarkerType() != null) {
+			if(TggUtil.getElemMarker(rhsSourceNode) != null) {
 				//node is currently marked as new,
 				// demark it
 				add(new MarkCommand(rhsSourceNode));
 			}
-			if(((TNode) rhsTargetNode).getMarkerType() != null) {
+			if(TggUtil.getElemMarker(rhsTargetNode) != null) {
 				//node is currently marked as new,
 				// demark it
 				add(new MarkCommand(rhsTargetNode));
@@ -124,7 +125,7 @@ public class MarkEdgeCommand extends CompoundCommand {
 				lhsEdge.setType(rhsEdge.getType());
 				lhsEdge.setGraph(lhsSourceNode.getGraph());
 				// remove marker
-				((TEdge) rhsEdge).setMarkerType(null);
+				TggUtil.setElemMarker(rhsEdge, null);
 			}
 			else System.out.println("Demarking of edge was not successful: source node or target node is inconsistent.");
 			

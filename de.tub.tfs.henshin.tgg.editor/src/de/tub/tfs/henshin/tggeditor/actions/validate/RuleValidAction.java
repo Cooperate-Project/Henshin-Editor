@@ -36,6 +36,7 @@ import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.TGGEditorMarkerResolutionGenerator.ErrorTypes;
 import de.tub.tfs.henshin.tggeditor.TGGEditorMarkerResolutionGenerator.TGGMarkerAttributes;
 import de.tub.tfs.henshin.tggeditor.dialogs.ValidTestDialog;
@@ -251,7 +252,7 @@ public class RuleValidAction extends SelectionAction {
 		
 		for (Node node : rule.getLhs().getNodes()) {
 			TNode tnode = (TNode) node;
-			if (!RuleUtil.getRuleMarkerTypes().contains(tnode.getMarkerType()))
+			if (!RuleUtil.getRuleMarkerTypes().contains(TggUtil.getElemMarker(tnode)))
 				{
 				errors.add("The node " + node.getName() + " doesn't have a valid marker.");
 				IMarker marker = IDUtil.getHostEditor(rule).createErrorMarker(IMarker.SEVERITY_WARNING, node, rule.getName(), "The node " + node.getName() + ": doesn't have a valid marker.");
@@ -524,9 +525,9 @@ public class RuleValidAction extends SelectionAction {
 	private static void validateTGG() {
 		boolean errorOccurred = false;
 
-		if (rule.getMarkerType() != null)
+		if (TggUtil.getElemMarker(rule) != null)
 			// each TGG rule must create at least one element, otherwise the operational rules will not terminate
-			if (rule.getMarkerType().equals(RuleUtil.TGG_RULE)) {
+			if (RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(rule))) {
 				// determine whether rule creates any attribute
 				boolean ruleCreatesAttribute = false;
 				for (Node n : rule.getRhs().getNodes()) {
@@ -534,8 +535,7 @@ public class RuleValidAction extends SelectionAction {
 					for (Attribute at : n.getAttributes()) {
 					TAttribute a = (TAttribute) at;	
 					checkMarkerDPOConsistency(a);
-					if (a.getMarkerType() != null
-							&& a.getMarkerType().equals(RuleUtil.NEW) )
+					if (RuleUtil.NEW.equals(TggUtil.getElemMarker(a)))
 						ruleCreatesAttribute = true;
 					}
 				}
@@ -558,9 +558,9 @@ public class RuleValidAction extends SelectionAction {
 				
 			} 
 			// each operational TGG rule must contain at least one translation marker, otherwise it will not terminate
-			else if (rule.getMarkerType().equals(RuleUtil.TGG_FT_RULE)
+			else if (RuleUtil.TGG_FT_RULE.equals(TggUtil.getElemMarker(rule))
 					//NEW IMPL validation for it and ft rules should be idem
-					|| rule.getMarkerType().equals(RuleUtil.TGG_IT_RULE)
+					|| RuleUtil.TGG_IT_RULE.equals(TggUtil.getElemMarker(rule))
 					//NEW IMPL end
 					) {
 				// determine whether rule contains any translation marker
@@ -568,25 +568,20 @@ public class RuleValidAction extends SelectionAction {
 				// check nodes
 				for (Node no : rule.getRhs().getNodes()) {
 					TNode n = (TNode) no; 
-					if (n.getMarkerType() != null
-							&& n.getMarkerType().equals(RuleUtil.Translated) )
+					if (RuleUtil.Translated.equals(TggUtil.getElemMarker(n)) )
 						ftRuleContainsTRMarker = true;
 					// check attributes
 					for (Attribute at : n.getAttributes()) {
 						TAttribute a = (TAttribute) at;	
-							if (a.getMarkerType() != null
-								
-								&& a.getMarkerType()
-										.equals(RuleUtil.Translated) )
-							ftRuleContainsTRMarker = true;
+							if (RuleUtil.Translated.equals(TggUtil.getElemMarker(a)))
+									ftRuleContainsTRMarker = true;
 					}
 
 				}
 				// check edges
 				for (Edge ed : rule.getRhs().getEdges()) {
-					TEdge e =(TEdge) ed;
-					if (e.getMarkerType() != null
-							&& e.getMarkerType().equals(RuleUtil.Translated) )
+					TEdge e = (TEdge) ed;
+					if (RuleUtil.Translated.equals(TggUtil.getElemMarker(e)))
 						ftRuleContainsTRMarker = true;
 				}
 				if (!ftRuleContainsTRMarker) {
@@ -601,7 +596,7 @@ public class RuleValidAction extends SelectionAction {
 		// check marking of created nodes
 		for(Node n: createdNodes){
 			TNode node = (TNode) n;
-			if (RuleUtil.NEW.equals(node.getMarkerType())){
+			if (RuleUtil.NEW.equals(TggUtil.getElemMarker(node))){
 				
 			} else {
 				IMarker marker = IDUtil.getHostEditor(rule).createErrorMarker(IMarker.SEVERITY_ERROR, node, rule.getName(), "The node " + node.getName() + ": "
@@ -659,7 +654,7 @@ public class RuleValidAction extends SelectionAction {
 		String errorMsg = "";
 		if(o instanceof TNode){
 			TNode n = (TNode) o;
-			isCreatedByMarker=RuleUtil.NEW.equals(n.getMarkerType());
+			isCreatedByMarker=RuleUtil.NEW.equals(TggUtil.getElemMarker(n));
 			isCreatedByDPO=createdNodes.contains(n);
 			errorMsg = "The node "
 					+ (n.getName() == null ? "null" : n.getName())
@@ -668,7 +663,7 @@ public class RuleValidAction extends SelectionAction {
 		}
 		if(o instanceof TEdge){
 			TEdge e = (TEdge) o;
-			isCreatedByMarker=RuleUtil.NEW.equals(e.getMarkerType());
+			isCreatedByMarker=RuleUtil.NEW.equals(TggUtil.getElemMarker(e));
 			isCreatedByDPO=createdEdges.contains(e);
 			errorMsg = "An edge of type"
 					+ (e.getType() == null ? "null" : e.getType().getName());
@@ -676,7 +671,7 @@ public class RuleValidAction extends SelectionAction {
 		if(o instanceof TAttribute){
 			TAttribute a = (TAttribute) o;
 			Node n = a.getNode();
-			isCreatedByMarker=RuleUtil.NEW.equals(a.getMarkerType());
+			isCreatedByMarker=RuleUtil.NEW.equals(TggUtil.getElemMarker(a));
 			isCreatedByDPO=createdAttributes.contains(a);
 			errorMsg = "The node "
 					+ (n.getName() == null ? "null" : n.getName())

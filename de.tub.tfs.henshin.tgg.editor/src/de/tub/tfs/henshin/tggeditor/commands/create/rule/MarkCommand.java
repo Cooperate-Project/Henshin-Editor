@@ -21,13 +21,11 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import de.tub.tfs.henshin.tgg.TAttribute;
-import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
-import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.muvitor.commands.SimpleDeleteEObjectCommand;
 
 /**
@@ -85,7 +83,7 @@ public class MarkCommand extends CompoundCommand {
 		
 		// case: node is currently preserved and shall be marked as new
 		// and the node marker ++ is not present
-		if (!RuleUtil.NEW.equals(((TNode) rhsNode).getMarkerType())) {
+		if (!RuleUtil.NEW.equals(TggUtil.getElemMarker(rhsNode))) {
 			// - if the rule is consistent, then the first check for the
 			// mapping is valid already, otherwise, the inconsistency will
 			// be removed
@@ -150,7 +148,7 @@ public class MarkCommand extends CompoundCommand {
 
 		// mark all contained attributes as new
 		for (Attribute attr : rhsNode.getAttributes()) {
-			if (((TAttribute) attr).getMarkerType() != null){ // attribute is already marked as created
+			if (TggUtil.getElemMarker(attr) != null){ // attribute is already marked as created
 			}
 			else
 			{   // mark attribute as created
@@ -162,16 +160,16 @@ public class MarkCommand extends CompoundCommand {
 		
 		for(Edge e:rhsNode.getIncoming()){
 			// if edge is not marked, then mark it
-			if(((TEdge) e).getMarkerType() == null)
+			if(TggUtil.getElemMarker(e) == null)
 				add(new MarkEdgeCommand(e));
 		}
 		for(Edge e:rhsNode.getOutgoing()){
 			// if edge is not marked, then mark it
-			if(((TEdge) e).getMarkerType() == null)
+			if(TggUtil.getElemMarker(e) == null)
 				add(new MarkEdgeCommand(e));
 		}
 
-		((TNode) rhsNode).setMarkerType(RuleUtil.NEW);
+		TggUtil.setElemMarker(rhsNode, RuleUtil.NEW);
 		
 		
 		if(lhsNode!=null){
@@ -218,7 +216,7 @@ public class MarkCommand extends CompoundCommand {
 		lhsNode.setName(rhsNode.getName());
 		lhsNode.setType(rhsNode.getType());
 		
-		((TNode) rhsNode).setMarkerType(null);
+		TggUtil.setElemMarker(rhsNode, null);
 		
 		
 		mapping = HenshinFactory.eINSTANCE.createMapping();

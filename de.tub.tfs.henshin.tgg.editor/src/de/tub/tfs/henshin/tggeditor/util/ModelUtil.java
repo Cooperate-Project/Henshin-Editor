@@ -42,6 +42,7 @@ import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.TggPackage;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 
 /**
@@ -608,7 +609,7 @@ public class ModelUtil {
 	public static boolean isOpRule(Rule rule) {
 
 		if (rule instanceof TGGRule
-				&& !RuleUtil.TGG_RULE.equals(((TGGRule) rule).getMarkerType()))
+				&& !RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(rule)))
 			return true;
 		return false;
 	}

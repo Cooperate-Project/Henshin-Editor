@@ -47,6 +47,7 @@ import de.tub.tfs.henshin.tgg.TRule;
 import de.tub.tfs.henshin.tgg.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.CreateAttributeConditionCommand;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.CreateNACCommand;
 import de.tub.tfs.henshin.tggeditor.commands.create.rule.CreateParameterCommand;
@@ -207,7 +208,8 @@ public class GenerateConcurrentRulesAction extends SelectionAction {
 				sRuleTEP = (RuleTreeEditPart) selectedObject;
 				sRule = (TGGRule) sRuleTEP.getModel();
 				// check whether selected rule is a transformation rule
-				if (!RuleUtil.TGG_RULE.equals(sRule.getMarkerType()))
+				
+				if (!RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(sRule)))
 					return false;
 				sRule2Folder.put(sRule,
 						(RuleFolderTreeEditPart) sRuleTEP.getParent());
@@ -219,7 +221,7 @@ public class GenerateConcurrentRulesAction extends SelectionAction {
 
 				for (Unit subRule : sSubRules) {
 					sRule = (TGGRule) subRule;
-					if (!RuleUtil.TGG_RULE.equals(sRule.getMarkerType())) {
+					if (!RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(sRule))) {
 						return false;
 					}
 				}
@@ -238,7 +240,7 @@ public class GenerateConcurrentRulesAction extends SelectionAction {
 		for (Unit unit : folder.getSubUnits()) {
 			if (unit instanceof IndependentUnit){
 				getInitialRules((IndependentUnit) unit);
-			} else if (unit instanceof TGGRule && RuleUtil.TGG_RULE.equals(((TGGRule) unit).getMarkerType())){
+			} else if (unit instanceof TGGRule && RuleUtil.TGG_RULE.equals(TggUtil.getElemMarker(unit))){
 				initialRules.add((TGGRule) unit);
 			}
 		}

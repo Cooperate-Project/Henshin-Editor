@@ -14,9 +14,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.henshin.model.Annotation;
 import org.eclipse.emf.henshin.model.HenshinPackage;
 import org.eclipse.emf.henshin.model.ModelElement;
@@ -31,7 +29,6 @@ import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggPackage;
 import de.tub.tfs.henshin.tgg.TripleComponent;
 import de.tub.tfs.muvitor.ui.utils.EMFModelManager;
-import de.tub.tfs.muvitor.ui.utils.SaveDelegate;
 
 /**
  * Class for general methods for loading triple graphs - used by HenshinTGG.
@@ -42,6 +39,7 @@ import de.tub.tfs.muvitor.ui.utils.SaveDelegate;
 public class TggUtil {
 
 
+	private static final String MARKER_KEY = "marker";
 	// root annotation key
 	public static final String HENSHIN_TGG_PKG_KEY = "de.tu-berlin.tfs.henshin.tgg";
 	public static final String HENSHIN_TGG_ANNOTATION_VALUE = "tgg";
@@ -113,6 +111,40 @@ public class TggUtil {
 		return null;
 	}
 
+	
+	/**
+	 * retrieve the Tgg annotation at position
+	 * @param elem - the model element
+	 * @param position - the position of the annotation that shall be retrieved
+	 * @return
+	 */
+	public static void putElemTggAnnotation(ModelElement elem, int position, String key, String value) {
+		Annotation tggAnnotation = null;
+		if( elem.getAnnotations().size() > 0)
+			tggAnnotation = getElemAnnotation(elem, HENSHIN_TGG_ANNOTATION_VALUE);
+		
+		//create if not existing
+		if(tggAnnotation == null) {
+			tggAnnotation = createElemAnnotation(HENSHIN_TGG_ANNOTATION_VALUE, HENSHIN_TGG_ANNOTATION_VALUE);
+			elem.getAnnotations().add(tggAnnotation);
+		}
+		
+		EList<Annotation> annotations = tggAnnotation.getAnnotations();
+		
+		if (annotations.size() > position) {
+			annotations.get(position).setKey(key);
+			annotations.get(position).setValue(value);
+		}
+		else {
+			while (annotations.size() < position){
+				annotations.add(null);
+			}
+			
+			Annotation a = createElemAnnotation(key, value);
+			annotations.add(a);
+		}
+		
+	}
 
 	
 	/**
@@ -152,6 +184,11 @@ public class TggUtil {
 	// retrieve the marker of elem
 	public static String getElemMarker(ModelElement elem) {
 		return getElemTggAnnotation(elem, MARKER_ANNOTATION_POS);
+	}
+	
+	// set the marker of elem
+	public static void setElemMarker(ModelElement elem, String marker) {
+		putElemTggAnnotation(elem, MARKER_ANNOTATION_POS, MARKER_KEY, marker);
 	}
 
 	public static void addElemAnnotation(ModelElement elem,
@@ -201,15 +238,15 @@ public class TggUtil {
 	}
 
 	public static Boolean getIsTranslated(TNode tNode) {
-		return getIsTranslated(tNode.getMarkerType());
+		return getIsTranslated(TggUtil.getElemMarker(tNode));
 	}
 
 	public static Boolean getIsTranslated(TAttribute att) {
-		return getIsTranslated(att.getMarkerType());
+		return getIsTranslated(TggUtil.getElemMarker(att));
 	}
 
 	public static Boolean getIsTranslated(TEdge tEdge) {
-		return getIsTranslated(tEdge.getMarkerType());
+		return getIsTranslated(TggUtil.getElemMarker(tEdge));
 	}
 
 	private static Boolean getIsTranslated(String markerType) {
