@@ -25,11 +25,11 @@ import org.eclipse.emf.henshin.model.Module;
 import org.eclipse.emf.henshin.model.Node;
 
 import de.tub.tfs.henshin.tgg.ImportedPackage;
-import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.util.ExceptionUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 
 
@@ -137,6 +137,7 @@ public class NodeTypes {
 	 * @param impPkgs the list of imported packages
 	 * @return the edge types of the list of imported packages
 	 */
+	@Deprecated
 	public static List<EReference> getEdgeTypesOfImportedPackages(EList<ImportedPackage> impPkgs) {
 		List<EPackage> pkgs = new Vector<EPackage>();
 		for(ImportedPackage emodel:impPkgs){
@@ -173,11 +174,11 @@ public class NodeTypes {
 	 */
 	public static TripleComponent getTripleComponent(Node node){
 
-		if (NodeUtil.isSourceNode((TNode) node))
+		if (NodeUtil.isSourceNode(node))
 			return TripleComponent.SOURCE;
-		if (NodeUtil.isCorrespondenceNode((TNode) node))
+		if (NodeUtil.isCorrespondenceNode(node))
 			return TripleComponent.CORRESPONDENCE;
-		if (NodeUtil.isTargetNode((TNode) node))
+		if (NodeUtil.isTargetNode(node))
 			return TripleComponent.TARGET;
 		// in all other cases
 		return TripleComponent.SOURCE;
@@ -226,26 +227,7 @@ public class NodeTypes {
 		return class1.getEAllSuperTypes().contains(extendsClass);
 	}
 	
-	/**
-	 * @param ePackages
-	 */
-	private void setEPackages(List<EPackage> ePackages, EList<ImportedPackage> importedPackages) {
-		for(ImportedPackage p: importedPackages){
-			ePackages.add(p.getPackage());
-		}
-	}
-
 	
-	/**
-	 * Computes a list of Epackages of a triple component from the list of imported packages
-	 * @param impPackages
-	 * @param nodeGraphType
-	 * @return list of Epackages of the specified triple component 
-	 */
-	public static List<EPackage> getEPackagesOfComponent(EList<ImportedPackage> impPackages, TripleComponent component) {
-		List<ImportedPackage> restrictedList = getImportedPackagesOfComponent(impPackages,component);
-		return getEPackagesFromImportedPackages(restrictedList);
-	}
 
 	/**
 	 * Computes a list of imported packages to a triple component
@@ -254,16 +236,16 @@ public class NodeTypes {
 	 * @return 
 	 * @return
 	 */
-	public static List<ImportedPackage> getImportedPackagesOfComponent(EList<ImportedPackage> impPackages, TripleComponent component) {
-		if(impPackages==null)
-			{ExceptionUtil.error("Import packages are missing for retrieving the imported packages of the component"); return null;}
-		List<ImportedPackage> restrictedList = new Vector<ImportedPackage>();
-		ImportedPackage pkg;
-		Iterator<ImportedPackage> iter = impPackages.iterator();
+	public static List<EPackage> getImportedPackagesOfComponent(Module tgg, TripleComponent component) {
+		List<EPackage> restrictedList = new Vector<EPackage>();
+		EPackage pkg;
+		EList<EPackage> impPackages = tgg.getImports();
+
+		Iterator<EPackage> iter = impPackages.iterator();
 		while (iter.hasNext()) {
-			pkg=iter.next();
-		    if (pkg.getComponent() == component) 
-		    		restrictedList.add(pkg);
+			pkg = iter.next();
+			if (TggUtil.getPackageComponent(tgg, pkg).contains(component))
+				restrictedList.add(pkg);
 		}
 		return restrictedList;
 	}
@@ -286,7 +268,7 @@ public class NodeTypes {
 
 
 
-
+	@Deprecated
 	public static List<EPackage> getEPackagesFromImportedPackages(
 			List<ImportedPackage> importedPackages) {
 		if(importedPackages==null)
@@ -302,8 +284,9 @@ public class NodeTypes {
 		return ePkgs;
 	}
 	
+	@Deprecated
 	public static List<ImportedPackage> getImportedPackagesFromEPackages(
-			List<EPackage> ePackages, TripleComponent component) {
+			List<EPackage> ePackages, de.tub.tfs.henshin.tgg.TripleComponent component) {
 		if(ePackages==null)
 			{ExceptionUtil.error("EPackages are missing for retrieving the imported packages"); return null;}
 		// iterate over the imported packages and return the list of Epackages

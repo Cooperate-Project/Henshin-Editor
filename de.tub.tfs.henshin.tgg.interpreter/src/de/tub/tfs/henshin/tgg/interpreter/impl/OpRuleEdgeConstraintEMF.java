@@ -23,7 +23,6 @@ import org.eclipse.emf.henshin.model.Edge;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
@@ -50,7 +49,7 @@ public class OpRuleEdgeConstraintEMF implements BinaryConstraint {
 	 * in a {@link Rule} or in a nac.
 	 */
 
-	private TEdge ruleEdge;
+	private Edge ruleEdge;
 	private String ruleEdgeMarker;
 
 	private DomainSlot source;
@@ -70,8 +69,7 @@ public class OpRuleEdgeConstraintEMF implements BinaryConstraint {
 			Edge edge,
 			HashMap<EObject, HashMap<EReference, HashMap<EObject, Boolean>>> isTranslatedEdgeMap) {
 
-		assert(edge instanceof TEdge):EDGE_ERROR; 
-		this.ruleEdge = (TEdge) edge;
+		this.ruleEdge = edge;
 
 		assert(edge != null):EDGE_ERROR;
 		this.ruleEdgeMarker = TggUtil.getElemMarker(ruleEdge);

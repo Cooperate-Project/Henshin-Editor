@@ -36,7 +36,7 @@ import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.ExceptionUtil;
@@ -221,7 +221,7 @@ public class CreateRecPrototypeRulesAction extends SelectionAction {
 	public static List<EPackage> getPackages(TGG layoutModel, TripleComponent type) {
 		
 		if (layoutModel == null) {ExceptionUtil.error("Layout model is missing"); return null;}
-		return NodeTypes.getEPackagesOfComponent(layoutModel.getImportedPkgs(),type);
+		return NodeTypes.getImportedPackagesOfComponent(layoutModel, type);
 	}
 	
 

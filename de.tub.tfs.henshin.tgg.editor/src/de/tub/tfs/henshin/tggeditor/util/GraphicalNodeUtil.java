@@ -42,7 +42,7 @@ import de.tub.tfs.henshin.tgg.NodeLayout;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.impl.TggHenshinEGraph;
@@ -363,12 +363,10 @@ public class GraphicalNodeUtil {
 		if(!isTypeGraphComplete(tgg.getImportedPkgs()))
 				return true;
 		else{
-			List<ImportedPackage> pkgs = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.SOURCE);
-			List<ImportedPackage> pkgt = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.TARGET);
-			List<ImportedPackage> pkgc = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.CORRESPONDENCE);
+			List<EPackage> pkgs = NodeTypes.getImportedPackagesOfComponent(tgg,TripleComponent.SOURCE);
 
-			for (ImportedPackage importedPackage : pkgs) {
-				if (importedPackage.getPackage().equals(type.getEPackage()))
+			for (EPackage importedPackage : pkgs) {
+				if (importedPackage.equals(type.getEPackage()))
 					return true;
 			}
 
@@ -464,12 +462,10 @@ public class GraphicalNodeUtil {
 		if (tgg == null){
 			return false;
 		}
-		List<ImportedPackage> pkgs = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.SOURCE);
-		List<ImportedPackage> pkgt = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.TARGET);
-		List<ImportedPackage> pkgc = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.CORRESPONDENCE);
+		List<EPackage> pkgt = NodeTypes.getImportedPackagesOfComponent(tgg,TripleComponent.TARGET);
 
-		for (ImportedPackage importedPackage : pkgt) {
-			if (importedPackage.getPackage().equals(type.getEPackage()))
+		for (EPackage importedPackage : pkgt) {
+			if (importedPackage.equals(type.getEPackage()))
 				return true;
 		}
 
@@ -487,15 +483,13 @@ public class GraphicalNodeUtil {
 			return false;
 		}
 		
-		List<ImportedPackage> pkgs = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.SOURCE);
-		List<ImportedPackage> pkgt = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.TARGET);
-		List<ImportedPackage> pkgc = NodeTypes.getImportedPackagesOfComponent(tgg.getImportedPkgs(),TripleComponent.CORRESPONDENCE);
+		List<EPackage> pkgc = NodeTypes.getImportedPackagesOfComponent(tgg,TripleComponent.CORRESPONDENCE);
 
-
-		for (ImportedPackage importedPackage : pkgc) {
-			if (importedPackage.getPackage().equals(type.getEPackage()))
+		for (EPackage importedPackage : pkgc) {
+			if (importedPackage.equals(type.getEPackage()))
 				return true;
 		}
+
 		return false;
 	}
 	
@@ -675,7 +669,9 @@ public class GraphicalNodeUtil {
 //		}
 //		return guess;
 		TNode node = (TNode) n;
-		if (node.getComponent()!=null) return node.getComponent(); 
+		if (TggUtil.getElemComponent(node) != null) 
+			return TggUtil.getElemComponent(node);
+		
 		return NodeUtil.getComponentFromPosition((TNode)n);
 	}
 	

@@ -16,7 +16,8 @@ import org.eclipse.gef.commands.Command;
 import de.tub.tfs.henshin.tgg.ImportedPackage;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TggFactory;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
 public class SetImportedPackageCommand extends Command {
 	EPackage target;
@@ -28,9 +29,10 @@ public class SetImportedPackageCommand extends Command {
 	public SetImportedPackageCommand(EPackage target, TGG tgg, TripleComponent component) {
 		this.target = target;
 		this.tgg = tgg;
+		TggUtil.setPackageComponent(tgg, target, component.toString());
 		this.impPackage = TggFactory.eINSTANCE.createImportedPackage();
 		this.impPackage.setPackage(target);
-		this.impPackage.setComponent(component);
+		this.impPackage.setComponent(de.tub.tfs.henshin.tgg.TripleComponent.get(component.toString()));
 	}
 
 	@Override

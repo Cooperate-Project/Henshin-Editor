@@ -28,10 +28,7 @@ import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.emf.henshin.model.Unit;
 
-import de.tub.tfs.henshin.tgg.TAttribute;
-import de.tub.tfs.henshin.tgg.TEdge;
-import de.tub.tfs.henshin.tgg.TNode;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.TggEngine;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
@@ -268,8 +265,8 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 				
 				EObject nodeEObject = resultMatch.getNodeTarget(ruleNodeRHS);
 				
-				if (ruleNodeRHS instanceof TNode) {
-					tripleComponentNodeMap.put(nodeEObject, ((TNode) ruleNodeRHS).getComponent());
+				if (ruleNodeRHS instanceof Node) {
+					tripleComponentNodeMap.put(nodeEObject, TggUtil.getElemComponent(ruleNodeRHS));
 
 					if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleNodeRHS))) {
 						isTranslatedNodeMap.put(nodeEObject, true);

@@ -22,7 +22,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import de.tub.tfs.henshin.tgg.ImportedPackage;
 import de.tub.tfs.henshin.tgg.TGG;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tggeditor.editpolicies.ImportedModellEditPolicy;
 import de.tub.tfs.henshin.tggeditor.model.properties.tree.ImportPropertySource;
 import de.tub.tfs.henshin.tggeditor.util.IconUtil;
@@ -74,7 +74,7 @@ IDirectEditPart{
 	private void markImportedPackages(List<ImportedPackage> pkgs,
 		TripleComponent component) {
 		for(ImportedPackage p: pkgs){
-			p.setComponent(component);
+			p.setComponent(de.tub.tfs.henshin.tgg.TripleComponent.get(component.toString()));
 		}
 	}
 

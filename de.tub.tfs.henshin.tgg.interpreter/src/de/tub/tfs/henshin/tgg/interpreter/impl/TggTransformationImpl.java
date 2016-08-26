@@ -36,10 +36,7 @@ import org.eclipse.emf.henshin.model.Graph;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.TAttribute;
-import de.tub.tfs.henshin.tgg.TEdge;
-import de.tub.tfs.henshin.tgg.TNode;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.TggTransformation;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
@@ -194,34 +191,31 @@ public class TggTransformationImpl implements TggTransformation {
 		EObject source=null;
 		EObject target=null;
 		Boolean translationMarker=null;
-		for(Node n:graph.getNodes()){
-			if(n instanceof TNode)
-				translationMarker = TggUtil.getIsTranslated(((TNode)n));
-			if(translationMarker!=null){
+		for (Node n : graph.getNodes()) {
+			translationMarker = TggUtil.getIsTranslated(n);
+			if (translationMarker != null) {
 				o = node2eObject.get(n);
-				isTranslatedNodeMap.put(o,translationMarker);
-				translationMarker=null;
+				isTranslatedNodeMap.put(o, translationMarker);
+				translationMarker = null;
 			}
-			for(Attribute att:n.getAttributes()){
-				if(att instanceof TAttribute)
-					translationMarker =TggUtil.getIsTranslated((TAttribute)att);
-				if(	translationMarker !=null){
-					a= att.getType();
+			for (Attribute att : n.getAttributes()) {
+				translationMarker = TggUtil.getIsTranslated(att);
+				if (translationMarker != null) {
+					a = att.getType();
 					addToTranslatedAttributeMap(o, a, translationMarker);
-					translationMarker=null;
+					translationMarker = null;
 				}
 			}
 		
 		}
-		for(Edge e:graph.getEdges()){
-			if(e instanceof TEdge)
-				translationMarker = TggUtil.getIsTranslated(((TEdge)e));
-			if (translationMarker!=null){
-				source=node2eObject.get(e.getSource());
-				eRef=e.getType();
-				target= node2eObject.get(e.getTarget());
-				addToTranslatedEdgeMap(source, eRef, target,translationMarker);
-				translationMarker=null;
+		for (Edge e : graph.getEdges()) {
+			translationMarker = TggUtil.getIsTranslated(e);
+			if (translationMarker != null) {
+				source = node2eObject.get(e.getSource());
+				eRef = e.getType();
+				target = node2eObject.get(e.getTarget());
+				addToTranslatedEdgeMap(source, eRef, target, translationMarker);
+				translationMarker = null;
 			}
 		}
 	}
@@ -381,10 +375,9 @@ public class TggTransformationImpl implements TggTransformation {
 			// fill isTranslatedNodeMap
 			List<Node> rhsNodes = rule.getRhs().getNodes();
 			Match resultMatch = ruleApplication.getResultMatch();
-			for (Node n: rhsNodes) {
-				TNode ruleNodeRHS = (TNode) n;
+			for (Node ruleNodeRHS: rhsNodes) {
 				EObject nodeEObject = resultMatch.getNodeTarget(ruleNodeRHS);
-				tripleComponentNodeMap.put(nodeEObject,ruleNodeRHS.getComponent());
+				tripleComponentNodeMap.put(nodeEObject, TggUtil.getElemComponent(ruleNodeRHS));
 				if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleNodeRHS))) {
 					isTranslatedNodeMap.put(nodeEObject, true);
 					updateTranslatedAttributeMap(ruleNodeRHS, nodeEObject);

@@ -152,22 +152,27 @@ List<CriticalPair> critPairList = _aggInfo.getConflictOverlappings(_firstRule, _
 			TNode n = (TNode) no;
 			
 			if (n != null) {
-				//if (p.getCriticalObjects().contains(n))
-				//	nL.setCritical(true);
+				// if (p.getCriticalObjects().contains(n))
+				// nL.setCritical(true);
 				if (NodeUtil.isSourceNode(n)) {
 					s++;
-					n.setX(GraphUtil.getMinXCoordinateForNodeGraphType(NodeTypes.getTripleComponent(n)) +10*s);
-					n.setY(50*s);
-				}
-				else if (NodeUtil.isCorrespondenceNode(n)) {
+					n.setX(GraphUtil.getMinXCoordinateForNodeGraphType(
+							NodeTypes.getTripleComponent(n))
+							+ 10 * s);
+					n.setY(50 * s);
+				} else if (NodeUtil.isCorrespondenceNode(n)) {
 					c++;
-					n.setX(GraphUtil.getMinXCoordinateForNodeGraphType(NodeTypes.getTripleComponent(n)) +10*c);
-					n.setY(50*c);
-				}
-				else {
+					n.setX(GraphUtil.getMinXCoordinateForNodeGraphType(
+							NodeTypes.getTripleComponent(n))
+							+ 10 * c);
+					n.setY(50 * c);
+				} else {
 					t++;
-					n.setX(GraphUtil.getMinXCoordinateForNodeGraphType(NodeTypes.getTripleComponent(n)) +10+t);
-					n.setY(50*t);;
+					n.setX(GraphUtil.getMinXCoordinateForNodeGraphType(
+							NodeTypes.getTripleComponent(n)) + 10
+							+ t);
+					n.setY(50 * t);
+					;
 				}
 			}
 		}

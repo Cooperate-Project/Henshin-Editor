@@ -390,7 +390,7 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 	
 	/** 
 	 * creates a new node of a triple graph with layout and marker information
-	 * returns the created TNode
+	 * returns the created Node
 	 */
 
 	protected Node createNode() {

@@ -24,10 +24,11 @@ import de.tub.tfs.henshin.tgg.ImportedPackage;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 import de.tub.tfs.henshin.tggeditor.util.GraphUtil;
 import de.tub.tfs.henshin.tggeditor.util.GraphicalNodeUtil;
 
@@ -112,7 +113,7 @@ public class CreateNodeCommand extends Command {
 		node.setX(x);
 		node.setY(y);
 		node.setName(name);
-		node.setComponent(nodeTripleComponent);
+		TggUtil.setElemComponent(node, nodeTripleComponent);
 		graph.getNodes().add(node);
 		//NEW GERARD
 		//node.setMarkerType(RuleUtil.NEW_Graph);
@@ -146,9 +147,8 @@ public class CreateNodeCommand extends Command {
 	private boolean typeFitsToGraphtype() {
 		boolean result = true;
 		if (type != null) {
-			EList<ImportedPackage> impPackages = layout.getImportedPkgs();
-			List<ImportedPackage> restrictedImportedPkgsImportedPackages = NodeTypes.getImportedPackagesOfComponent(impPackages,nodeTripleComponent);
-			List<EPackage> ePkgs = NodeTypes.getEPackagesFromImportedPackages(restrictedImportedPkgsImportedPackages);
+			
+			List<EPackage> ePkgs = NodeTypes.getImportedPackagesOfComponent(layout, nodeTripleComponent);
 			if (ePkgs != null) {
 				EPackage ecorePackage = EcorePackage.eINSTANCE;
 				List<EClass> ecoreNodeTypes = NodeTypes.getNodeTypesOfEPackage(ecorePackage,true);

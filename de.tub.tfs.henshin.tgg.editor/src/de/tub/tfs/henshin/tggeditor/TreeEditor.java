@@ -35,12 +35,14 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.Edge;
 import org.eclipse.emf.henshin.model.Graph;
 import org.eclipse.emf.henshin.model.HenshinPackage;
 import org.eclipse.emf.henshin.model.Module;
+import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.KeyHandler;
@@ -60,7 +62,7 @@ import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TRule;
 import de.tub.tfs.henshin.tgg.TggFactory;
 import de.tub.tfs.henshin.tgg.TggPackage;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
@@ -501,7 +503,7 @@ public class TreeEditor extends MuvitorTreeEditor {
 			if(currentObject instanceof TNode)
 			{
 				TNode node = (TNode) currentObject;
-				node.setComponent(NodeUtil.getComponentFromPosition(node));
+				TggUtil.setElemComponent(node, NodeUtil.getComponentFromPosition(node));
 			}
 			
 			// graphs
@@ -719,50 +721,50 @@ private void updateLHSAttribute(TAttribute rhsAttribute) {
 			if(tggModule.getSource()!=null){
 				pkg = TggFactory.eINSTANCE.createImportedPackage();
 				pkg.setPackage(tggModule.getSource());
-				pkg.setComponent(TripleComponent.SOURCE);
+				pkg.setComponent(de.tub.tfs.henshin.tgg.TripleComponent.SOURCE);
 				tggModule.getImportedPkgs().add(pkg);
 				tggModule.setSource(null);
 			}
 			if(tggModule.getTarget()!=null){
 				pkg = TggFactory.eINSTANCE.createImportedPackage();
 				pkg.setPackage(tggModule.getTarget());
-				pkg.setComponent(TripleComponent.TARGET);
+				pkg.setComponent(de.tub.tfs.henshin.tgg.TripleComponent.TARGET);
 				tggModule.getImportedPkgs().add(pkg);
 				tggModule.setTarget(null);
 			}
 			if(tggModule.getCorresp()!=null){
 				pkg = TggFactory.eINSTANCE.createImportedPackage();
 				pkg.setPackage(tggModule.getCorresp());
-				pkg.setComponent(TripleComponent.CORRESPONDENCE);
+				pkg.setComponent(de.tub.tfs.henshin.tgg.TripleComponent.CORRESPONDENCE);
 				tggModule.getImportedPkgs().add(pkg);
 				tggModule.setCorresp(null);
 			}
 //	
 			List<ImportedPackage> pkgs;
 			if(tggModule.getSourcePkgs()!=null){
-				pkgs =  NodeTypes.getImportedPackagesFromEPackages(tggModule.getSourcePkgs(),TripleComponent.SOURCE);
-				markImportedPackages(pkgs,TripleComponent.SOURCE);
+				pkgs =  NodeTypes.getImportedPackagesFromEPackages(tggModule.getSourcePkgs(), de.tub.tfs.henshin.tgg.TripleComponent.SOURCE);
+				markImportedPackages(tggModule, tggModule.getSourcePkgs(), TripleComponent.SOURCE);
 				tggModule.getImportedPkgs().addAll(pkgs);
 				tggModule.getSourcePkgs().clear();
 //		return this.corr;
 			}
 			if(tggModule.getCorrespondencePkgs()!=null){
-				pkgs =  NodeTypes.getImportedPackagesFromEPackages(tggModule.getCorrespondencePkgs(),TripleComponent.CORRESPONDENCE);
-				markImportedPackages(pkgs,TripleComponent.CORRESPONDENCE);
+				pkgs =  NodeTypes.getImportedPackagesFromEPackages(tggModule.getCorrespondencePkgs(), de.tub.tfs.henshin.tgg.TripleComponent.CORRESPONDENCE);
+				markImportedPackages(tggModule, tggModule.getCorrespondencePkgs(), TripleComponent.CORRESPONDENCE);
 				tggModule.getImportedPkgs().addAll(pkgs);
 				tggModule.getCorrespondencePkgs().clear();
 			}
 			if(tggModule.getTargetPkgs()!=null){
-				pkgs =  NodeTypes.getImportedPackagesFromEPackages(tggModule.getTargetPkgs(),TripleComponent.TARGET);
-				markImportedPackages(pkgs,TripleComponent.TARGET);
+				pkgs =  NodeTypes.getImportedPackagesFromEPackages(tggModule.getTargetPkgs(), de.tub.tfs.henshin.tgg.TripleComponent.TARGET);
+				markImportedPackages(tggModule, tggModule.getTargetPkgs(), TripleComponent.TARGET);
 				tggModule.getImportedPkgs().addAll(pkgs);
 				tggModule.getTargetPkgs().clear();
 			}
 		}
-	private void markImportedPackages(List<ImportedPackage> pkgs,
+	private void markImportedPackages(Module tgg, List<EPackage> pkgs,
 		TripleComponent component) {
-		for(ImportedPackage p: pkgs){
-			p.setComponent(component);
+		for(EPackage p: pkgs){
+			TggUtil.setPackageComponent(tgg, p, component.toString());
 		}
 	}
 

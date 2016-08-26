@@ -22,7 +22,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPart;
 
 import de.tub.tfs.henshin.tgg.TGG;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tggeditor.TreeEditor;
 import de.tub.tfs.henshin.tggeditor.commands.imports.ImportEcorModelCommand;
 import de.tub.tfs.henshin.tggeditor.commands.setType.SetImportedPackageCommand;

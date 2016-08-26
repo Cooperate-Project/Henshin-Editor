@@ -157,12 +157,11 @@ public class ExecuteOpRulesCommand extends CompoundCommand {
 		isTranslatedEdgeMap = translationMaps.getIsTranslatedEdgeMap();
 		isTranslatedAttributeMap = translationMaps.getIsTranslatedAttributeMap();
 
-		for (Node n : graph.getNodes()) {
-			TNode node = (TNode) n;
+		for (Node node : graph.getNodes()) {
 			EObject graphNodeEObject = node2eObject.get(node);
 			// set node component using the hash map from the transformation
 			if (tggTrafo.getTripleComponentNodeMap().containsKey(graphNodeEObject))
-					node.setComponent(tggTrafo.getTripleComponentNodeMap().get(graphNodeEObject));
+					TggUtil.setElemComponent(node, tggTrafo.getTripleComponentNodeMap().get(graphNodeEObject));
 			if (isTranslatedNodeMap.containsKey(graphNodeEObject)) {
 				// set marker type to mark the translated nodes
 				TggUtil.setElemMarker(node, RuleUtil.Not_Translated_Graph);

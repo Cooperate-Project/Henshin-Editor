@@ -32,7 +32,7 @@ import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.TggFactory;
-import de.tub.tfs.henshin.tgg.TripleComponent;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.TripleGraph;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
@@ -166,15 +166,13 @@ public abstract class ProcessRuleCommand extends Command {
 		for (Graph g : graphsToProcess) {
 			for (Node o : g.getNodes()) {
 
-				NodeProcessor np = nodeProcessors.get(NodeUtil
-						.guessTripleComponent((TNode) o));
+				NodeProcessor np = nodeProcessors.get(NodeUtil.guessTripleComponent((TNode) o));
 				if (np != null && np.filter(o, (Node) copier.get(o)))
 					np.process(o, (Node) copier.get(o));
-				((TNode) copier.get(o)).setComponent(NodeUtil
-						.guessTripleComponent((TNode) o));
+				TggUtil.setElemComponent((Node) copier.get(o), NodeUtil.guessTripleComponent(o));
 				TNode lhs = (TNode) RuleUtil.getLHSNode(o);
 				if (lhs != null)
-					lhs.setComponent(NodeUtil.guessTripleComponent((TNode) o));
+					TggUtil.setElemComponent(lhs, NodeUtil.guessTripleComponent(o));
 			}
 
 			/*
@@ -183,10 +181,10 @@ public abstract class ProcessRuleCommand extends Command {
 			for (Edge ruleEdge : g.getEdges()) {
 				for (EdgeProcessor ep : edgeProcessors) {
 					if (ep.filter(ruleEdge))
-						ep.process(ruleEdge,  (Edge) copier.get(ruleEdge));
+						ep.process(ruleEdge, (Edge) copier.get(ruleEdge));
 				}
 			}
-		
+
 		}
 
 		super.execute();
@@ -281,7 +279,8 @@ public abstract class ProcessRuleCommand extends Command {
 
 		newNode.setGraph(destinationGraph);
 		destinationGraph.getNodes().add(newNode);
-		((TNode)newNode).setComponent(NodeUtil.guessTripleComponent((TNode) originalNode));
+		TggUtil.setElemComponent(newNode, NodeUtil.guessTripleComponent((TNode) originalNode));
+		
 		return newNode;
 	}
 
@@ -290,7 +289,7 @@ public abstract class ProcessRuleCommand extends Command {
 		newNode.setName(originalNode.getName());
 		newNode.setType(originalNode.getType());
 		
-		((TNode)newNode).setComponent(NodeUtil.guessTripleComponent((TNode) originalNode));
+		TggUtil.setElemComponent(newNode, NodeUtil.guessTripleComponent(originalNode));
 		
 		newNode.setGraph(destinationGraph);
 		destinationGraph.getNodes().add(newNode);

@@ -18,7 +18,6 @@ import org.eclipse.emf.henshin.interpreter.matching.constraints.UnaryConstraint;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
@@ -60,7 +59,7 @@ public class OpRuleNodeConstraintEMF implements UnaryConstraint {
 	 * {@link FTRuleConstraint#check(Node graphNode)}). The node could be a node in
 	 * a {@link Rule} or in a nac.
 	 */
-	private TNode ruleTNode;
+	private Node ruleTNode;
 	private String ruleNodeMarker;
 	
 
@@ -71,7 +70,7 @@ public class OpRuleNodeConstraintEMF implements UnaryConstraint {
 	 */
 	public OpRuleNodeConstraintEMF(Node ruleNode, 
 			HashMap<EObject, Boolean> isTranslatedMap) {
-		this.ruleTNode = (TNode)ruleNode;
+		this.ruleTNode = ruleNode;
 		this.ruleNodeMarker=TggUtil.getElemMarker(ruleNode);
 		this.isTranslatedMap = isTranslatedMap;
 	}

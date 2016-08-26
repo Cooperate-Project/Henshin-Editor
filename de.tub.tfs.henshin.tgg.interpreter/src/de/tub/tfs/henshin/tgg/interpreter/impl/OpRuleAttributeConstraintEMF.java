@@ -21,8 +21,6 @@ import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.TAttribute;
-import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
@@ -52,12 +50,12 @@ public class OpRuleAttributeConstraintEMF implements UnaryConstraint {
 	 * {@link FTRuleConstraint#check(Node graphNode)}). The node could be a node in
 	 * a {@link Rule} or in a nac.
 	 */
-	private TNode ruleTNode;
+	private Node ruleTNode;
 	private String ruleNodeMarker;
 	
 	
 	
-	protected TAttribute ruleAttr;
+	protected Attribute ruleAttr;
 	private String ruleAttrMarker;
 	protected EAttribute eAttribute;
 	protected Boolean nullValueMatching;
@@ -71,7 +69,7 @@ public class OpRuleAttributeConstraintEMF implements UnaryConstraint {
 			HashMap<EObject, Boolean> isTranslatedMap, 
 			HashMap<EObject,HashMap<EAttribute, Boolean>> isTranslatedAttributeMap) {
 		
-		this((TAttribute)attr,isTranslatedMap,isTranslatedAttributeMap,true);
+		this(attr, isTranslatedMap, isTranslatedAttributeMap, true);
 	}
 	
 
@@ -85,10 +83,10 @@ public class OpRuleAttributeConstraintEMF implements UnaryConstraint {
 			HashMap<EObject,HashMap<EAttribute, Boolean>> isTranslatedAttributeMap, 
 			boolean nullValueMatching) {
 		
-		this.ruleTNode = (TNode)attr.getNode();
+		this.ruleTNode = attr.getNode();
 		this.ruleNodeMarker = TggUtil.getElemMarker(ruleTNode);
 		
-		this.ruleAttr = (TAttribute)attr;
+		this.ruleAttr = attr;
 		ruleAttrMarker = TggUtil.getElemMarker(ruleAttr);
 		this.isTranslatedNodeMap = isTranslatedMap;
 		this.isTranslatedAttributeMap = isTranslatedAttributeMap;

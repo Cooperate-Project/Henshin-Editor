@@ -32,6 +32,7 @@ import org.eclipse.swt.graphics.Color;
 
 
 import de.tub.tfs.henshin.tgg.TNode;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.impl.NodeTypes;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
@@ -125,15 +126,24 @@ public class NodeFigure extends Figure {
 	}
 
 	public void updateBG() {
-		switch(node.getComponent()){
-		case SOURCE: standardNodeBG_Color = TGGEditorConstants.SOURCE_COLOR;break;
-		case CORRESPONDENCE: standardNodeBG_Color = TGGEditorConstants.CORR_COLOR;break;
-		case TARGET: standardNodeBG_Color = TGGEditorConstants.TARGET_COLOR;break;
-		default:
-			break;
+		TripleComponent elemComponent = TggUtil.getElemComponent(node);
+		if (elemComponent != null) {
+			switch (elemComponent) {
+			case SOURCE:
+				standardNodeBG_Color = TGGEditorConstants.SOURCE_COLOR;
+				break;
+			case CORRESPONDENCE:
+				standardNodeBG_Color = TGGEditorConstants.CORR_COLOR;
+				break;
+			case TARGET:
+				standardNodeBG_Color = TGGEditorConstants.TARGET_COLOR;
+				break;
+			default:
+				break;
+			}
+			currentNodeBG_Color = standardNodeBG_Color;
+			this.setBackgroundColor(currentNodeBG_Color);
 		}
-		currentNodeBG_Color = standardNodeBG_Color;
-		this.setBackgroundColor(currentNodeBG_Color);
 	}
 
 	protected void createMarker() {
