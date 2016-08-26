@@ -16,6 +16,7 @@ import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.Edge;
 import org.eclipse.emf.henshin.model.Node;
 import de.tub.tfs.henshin.tgg.interpreter.TggTransformation;
+import de.tub.tfs.henshin.tgg.interpreter.TggTransformationInfo;
 
 public class TggEngineOperational extends TggEngineImpl {
 	/**
@@ -25,30 +26,30 @@ public class TggEngineOperational extends TggEngineImpl {
 	
 	/**
 	 */
-	public TggEngineOperational(EGraph graph,TggTransformation trafo) {
-		super(graph,trafo); 
-		assert(this.trafo!=null):"Transformation of TggEngineOperational is not set.";
+	public TggEngineOperational(EGraph graph, TggTransformationInfo trafoInfo) {
+		super(graph,trafoInfo); 
+		assert(this.trafoInfo!=null):"Transformation of TggEngineOperational is not set.";
 	}
 	
 	
 	@Override
 	public UnaryConstraint createUserConstraints(Attribute attribute) {
 		return new OpRuleAttributeConstraintEMF(attribute,
-				trafo.getTranslationMaps().isTranslatedNodeMap,
-				trafo.getTranslationMaps().isTranslatedAttributeMap,
-				trafo.getNullValueMatching());
+				trafoInfo.getTranslationMaps().isTranslatedNodeMap,
+				trafoInfo.getTranslationMaps().isTranslatedAttributeMap,
+				trafoInfo.getNullValueMatching());
 	}
 
 	@Override
 	public BinaryConstraint createUserConstraints(Edge edge) {
 		return new OpRuleEdgeConstraintEMF(edge,
 				//trafo.getTranslationMaps().isTranslatedNodeMap,
-				trafo.getTranslationMaps().isTranslatedEdgeMap);
+				trafoInfo.getTranslationMaps().isTranslatedEdgeMap);
 	}
 
 	@Override
 	public UnaryConstraint createUserConstraints(Node node) {
 		return new OpRuleNodeConstraintEMF(node,
-				trafo.getTranslationMaps().isTranslatedNodeMap);
+				trafoInfo.getTranslationMaps().isTranslatedNodeMap);
 	}
 }

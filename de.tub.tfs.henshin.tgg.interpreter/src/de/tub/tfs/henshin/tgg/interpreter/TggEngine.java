@@ -10,6 +10,7 @@
  *******************************************************************************/
 package de.tub.tfs.henshin.tgg.interpreter;
 
+import org.eclipse.emf.henshin.interpreter.Engine;
 import org.eclipse.emf.henshin.interpreter.Match;
 
 /**
@@ -17,7 +18,7 @@ import org.eclipse.emf.henshin.interpreter.Match;
  *
  * @author frank.hermann
  */
-public interface TggEngine {
+public interface TggEngine extends Engine {
 
 	/**
 	 * Post process tgg information after rule application.

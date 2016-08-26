@@ -104,12 +104,12 @@ public class TggTransformationImpl implements TggTransformation {
 	}
 	
 	@Override
-	public EGraph getGraph() {
+	public EGraph getEGraph() {
 		return eGraph;
 	}
 
 	@Override
-	public void setGraph(EGraph graph) {
+	public void setEGraph(EGraph graph) {
 		this.eGraph = graph;
 	}
 
@@ -335,7 +335,7 @@ public class TggTransformationImpl implements TggTransformation {
 							matchesToCheck = true;
 						else matchesToCheck = false;
 					}
-					if(debug){ 
+					if (LOG.isDebugEnabled()) {
 					endTimeOneStep=System.nanoTime();
 					duration=(endTimeOneStep-startTimeOneStep)/(1E6);
 					if(maxDuration<duration){
@@ -368,14 +368,13 @@ public class TggTransformationImpl implements TggTransformation {
 	}
 
 
-	private boolean executeOneStep(RuleApplicationImpl ruleApplication,
-			boolean foundApplication, Rule rule) {
+	private boolean executeOneStep(RuleApplicationImpl ruleApplication, boolean foundApplication, Rule rule) {
 		if (ruleApplication.execute(null)) {
 			foundApplication = true;
 			// fill isTranslatedNodeMap
 			List<Node> rhsNodes = rule.getRhs().getNodes();
 			Match resultMatch = ruleApplication.getResultMatch();
-			for (Node ruleNodeRHS: rhsNodes) {
+			for (Node ruleNodeRHS : rhsNodes) {
 				EObject nodeEObject = resultMatch.getNodeTarget(ruleNodeRHS);
 				tripleComponentNodeMap.put(nodeEObject, TggUtil.getElemComponent(ruleNodeRHS));
 				if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleNodeRHS))) {
@@ -391,10 +390,11 @@ public class TggTransformationImpl implements TggTransformation {
 			}
 			emfEngine.postProcess(resultMatch);
 			// everything successful, add the rule application
-			   ruleApplicationList.add(ruleApplication);
+			ruleApplicationList.add(ruleApplication);
 
 		} else {
-			// Match is not applicable, e.g. because it became invalid by a previous step - TODO: possible to improve efficiency
+			// Match is not applicable, e.g. because it became invalid by a
+			// previous step - TODO: possible to improve efficiency
 		}
 		return foundApplication;
 	}
@@ -418,7 +418,7 @@ public class TggTransformationImpl implements TggTransformation {
 	}
 
 	
-	private void updateTranslatedAttributeMap(Node ruleNodeRHS, EObject graphNodeEObject) {
+	public void updateTranslatedAttributeMap(Node ruleNodeRHS, EObject graphNodeEObject) {
 		// fill isTranslatedAttributeMap
 		// scan the contained attributes for <tr>
 		for (Attribute ruleAttribute : ruleNodeRHS.getAttributes()) {
@@ -440,7 +440,7 @@ public class TggTransformationImpl implements TggTransformation {
 	}
 
 
-	private void updateTranslatedEdgeMap(Node ruleNode, EObject sourceNodeEObject, Match resultMatch) {
+	public void updateTranslatedEdgeMap(Node ruleNode, EObject sourceNodeEObject, Match resultMatch) {
 		// fill isTranslatedEdgeMap
 		EObject targetNodeeObject;
 		// scan the outgoing edges for <tr>

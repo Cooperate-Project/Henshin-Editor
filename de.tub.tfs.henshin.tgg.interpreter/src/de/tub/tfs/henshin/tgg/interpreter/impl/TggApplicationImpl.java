@@ -1,6 +1,5 @@
 package de.tub.tfs.henshin.tgg.interpreter.impl;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -8,28 +7,23 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.henshin.interpreter.ApplicationMonitor;
 import org.eclipse.emf.henshin.interpreter.Assignment;
-import org.eclipse.emf.henshin.interpreter.Engine;
 import org.eclipse.emf.henshin.interpreter.InterpreterFactory;
 import org.eclipse.emf.henshin.interpreter.Match;
 import org.eclipse.emf.henshin.interpreter.RuleApplication;
 import org.eclipse.emf.henshin.interpreter.impl.AbstractApplicationImpl;
 import org.eclipse.emf.henshin.interpreter.impl.MatchImpl;
 import org.eclipse.emf.henshin.interpreter.impl.RuleApplicationImpl;
-import org.eclipse.emf.henshin.model.Attribute;
-import org.eclipse.emf.henshin.model.Edge;
 import org.eclipse.emf.henshin.model.HenshinPackage;
 import org.eclipse.emf.henshin.model.IndependentUnit;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.emf.henshin.model.Unit;
 
-import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.TggEngine;
+import de.tub.tfs.henshin.tgg.interpreter.TggTransformationInfo;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
 
@@ -37,31 +31,12 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 
 	private static final Logger LOG = Logger.getLogger(TggApplicationImpl.class);
 
-	/**
-	 * the maps for the marked elements 
-	 */
-	protected TranslationMaps translationMaps = new TranslationMaps();
-	/**
-	 * the map for the marked node objects
-	 */
-	protected HashMap<EObject, Boolean> isTranslatedNodeMap = translationMaps.getIsTranslatedNodeMap();
-	/**
-	 * the map for the marked attributes
-	 */
-	protected HashMap<EObject, HashMap<EAttribute, Boolean>> isTranslatedAttributeMap = translationMaps.getIsTranslatedAttributeMap();
-	/**
-	 * the map for the marked references
-	 */
-	protected HashMap<EObject, HashMap<EReference, HashMap<EObject, Boolean>>> isTranslatedEdgeMap = translationMaps.getIsTranslatedEdgeMap();
-
-	/**
-	 * the map storing the triple components for each node 
-	 */
-	protected HashMap<EObject, TripleComponent> tripleComponentNodeMap = new HashMap<EObject, TripleComponent>();
 	
 	
 	// Applied and undone rules:
 	protected final Stack<RuleApplication> appliedRules, undoneRules;
+	protected TggTransformationInfo trInfo;
+
 
 	/*
 	 * String name_OP_RULE_FOLDER = "FTRuleFolder"; IndependentUnit opRuleFolder
@@ -72,8 +47,9 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 	protected List<Rule> opRulesList = new Vector<Rule>();
 	IProgressMonitor progressMonitor;
 
-	public TggApplicationImpl(Engine engine) {
+	public TggApplicationImpl(TggEngine engine, TggTransformationInfo trInfo) {
 		super(engine);
+		this.trInfo = trInfo;
 		appliedRules = new Stack<RuleApplication>();
 		undoneRules = new Stack<RuleApplication>();
 	}
@@ -107,6 +83,10 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	
+
 
 	@Override
 	public boolean execute(ApplicationMonitor monitor) {
@@ -114,6 +94,7 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 			monitor = InterpreterFactory.INSTANCE.createApplicationMonitor();
 		}
 		appliedRules.clear();
+		
 		return doExecute(monitor);
 
 //		return false;
@@ -158,7 +139,7 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 		}
 
 		// check if any rule can be applied
-		// ruleApplicationList.clear();
+		//ruleApplicationList.clear();
 		long startTimeOneStep = System.nanoTime();
 		long endTimeOneStep = System.nanoTime();
 		double duration = 0;
@@ -260,32 +241,18 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 			List<Node> rhsNodes = rule.getRhs().getNodes();
 			Match resultMatch = ruleApplication.getResultMatch();
 			for (Node ruleNodeRHS : rhsNodes) {
-				
-				
-				
 				EObject nodeEObject = resultMatch.getNodeTarget(ruleNodeRHS);
-				
-				if (ruleNodeRHS instanceof Node) {
-					tripleComponentNodeMap.put(nodeEObject, TggUtil.getElemComponent(ruleNodeRHS));
-
-					if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleNodeRHS))) {
-						isTranslatedNodeMap.put(nodeEObject, true);
-						updateTranslatedAttributeMap(ruleNodeRHS, nodeEObject);
-						updateTranslatedEdgeMap(ruleNodeRHS, nodeEObject, resultMatch);
-					} else {
-						// context node, thus check whether the edges
-						// and attributes are translated
-						updateTranslatedAttributeMap(ruleNodeRHS, nodeEObject);
-						updateTranslatedEdgeMap(ruleNodeRHS, nodeEObject, resultMatch);
-					}
-				}
-				else {
+				trInfo.getTripleComponentNodeMap().put(nodeEObject, TggUtil.getElemComponent(ruleNodeRHS));
+				if (RuleUtil.Translated.equals(TggUtil.getElemMarker(ruleNodeRHS))) {
+					trInfo.getTranslationMaps().getIsTranslatedNodeMap().put(nodeEObject, true);
+					trInfo.updateTranslatedAttributeMap(ruleNodeRHS, nodeEObject);
+					trInfo.updateTranslatedEdgeMap(ruleNodeRHS, nodeEObject, resultMatch);
+				} else {
 					// context node, thus check whether the edges
 					// and attributes are translated
-					updateTranslatedAttributeMap(ruleNodeRHS, nodeEObject);
-					updateTranslatedEdgeMap(ruleNodeRHS, nodeEObject, resultMatch);
+					trInfo.updateTranslatedAttributeMap(ruleNodeRHS, nodeEObject);
+					trInfo.updateTranslatedEdgeMap(ruleNodeRHS, nodeEObject, resultMatch);
 				}
-				
 			}
 			((TggEngine) engine).postProcess(resultMatch);
 			// everything successful, add the rule application
@@ -298,54 +265,8 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 		return foundApplication;
 	}
 	
-	private void updateTranslatedAttributeMap(Node ruleNodeRHS, EObject graphNodeEObject) {
-		// fill isTranslatedAttributeMap
-		// scan the contained attributes for <tr>
-		for (Attribute ruleAttribute : ruleNodeRHS.getAttributes()) {
-			String isMarked = TggUtil.getElemMarker(ruleAttribute);
-			if (RuleUtil.Translated.equals(isMarked)) {
-				// mark this attribute to be translated
-				putAttributeInMap(graphNodeEObject, ruleAttribute.getType(), true);
-			}
-		}
-	}
 	
-	private void putAttributeInMap(EObject graphNodeEObject, EAttribute eAttr, Boolean value) {
-		HashMap<EAttribute,Boolean> attrMap = isTranslatedAttributeMap.get(graphNodeEObject);
-		if(attrMap==null) {
-			LOG.warn("!WARNING: Translated attribute map is missing node entry.");
-			return;
-		}
-		attrMap.put(eAttr, value);
-	}
-
-
-	private void updateTranslatedEdgeMap(Node ruleNode, EObject sourceNodeEObject, Match resultMatch) {
-		// fill isTranslatedEdgeMap
-		EObject targetNodeeObject;
-		// scan the outgoing edges for <tr>
-		for (Edge ruleEdge : ruleNode.getOutgoing()) {
-//			if (RuleUtil.Translated.equals( (((TEdge) ruleEdge).getMarkerType()))) {
-//				Node ruleTarget = ruleEdge.getTarget();
-//				targetNodeeObject = resultMatch.getNodeTarget(ruleTarget);
-//				// put edge in hashmap
-//				putEdgeInMap(sourceNodeEObject,ruleEdge.getType(),targetNodeeObject,true);
-//				
-//			}
-		}		
-	}
-
-	private void putEdgeInMap(			
-			EObject sourceNodeEObject, EReference eRef, EObject targetNodeEObject, Boolean value) {
-		HashMap<EReference,HashMap<EObject,Boolean>> edgeMap = isTranslatedEdgeMap.get(sourceNodeEObject);
-		if(edgeMap==null) {
-			LOG.warn("Translated edge map is missing node entry.");
-			return;
-		}
-		if(!edgeMap.containsKey(eRef))
-			edgeMap.put(eRef,new HashMap<EObject,Boolean>());
-		edgeMap.get(eRef).put(targetNodeEObject, value);
-		
-	}
+	
+	
 
 }

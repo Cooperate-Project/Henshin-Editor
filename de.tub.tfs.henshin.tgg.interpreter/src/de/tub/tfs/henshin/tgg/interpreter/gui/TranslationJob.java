@@ -363,7 +363,7 @@ public class TranslationJob extends Job {
 				long stage2 = time2 - time1;
 				LOG.info("Stage 2 -- Transformation: " + stage2 + " ms");
 				monitor.subTask("Saving result");
-				List<EObject> roots = tggTransformation.getGraph().getRoots();
+				List<EObject> roots = tggTransformation.getEGraph().getRoots();
 
 				Iterator<EObject> it = roots.iterator();
 				EObject targetRoot = null;

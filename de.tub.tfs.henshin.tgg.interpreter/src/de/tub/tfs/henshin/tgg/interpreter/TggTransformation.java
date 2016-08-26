@@ -11,16 +11,13 @@
 package de.tub.tfs.henshin.tgg.interpreter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.henshin.interpreter.EGraph;
 import org.eclipse.emf.henshin.interpreter.impl.RuleApplicationImpl;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.impl.TggEngineImpl;
 import de.tub.tfs.henshin.tgg.interpreter.impl.TggHenshinEGraph;
 import de.tub.tfs.henshin.tgg.interpreter.impl.TranslationMaps;
@@ -28,19 +25,9 @@ import de.tub.tfs.henshin.tgg.interpreter.impl.TranslationMaps;
 /**
  * The Interface for executing a transforamtion via operational TGG rules.
  */
-public interface TggTransformation {
+public interface TggTransformation extends TggTransformationInfo {
 
-	/**
-	 * Gets the triple component node map.
-	 *
-	 * @return the triple component node map
-	 */
-	public abstract HashMap<EObject, TripleComponent> getTripleComponentNodeMap();
-
-	/**
-	 * flag, whether attribute values can be matched to null values
-	 */
-	public abstract Boolean getNullValueMatching();
+	
 
 	
 	/**
@@ -49,20 +36,6 @@ public interface TggTransformation {
 	 * @return the rule application list
 	 */
 	public abstract ArrayList<RuleApplicationImpl> getRuleApplicationList();
-
-	/**
-	 * Gets the graph.
-	 *
-	 * @return the graph
-	 */
-	public abstract EGraph getGraph();
-
-	/**
-	 * Sets the graph.
-	 *
-	 * @param graph the graph to set
-	 */
-	public abstract void setGraph(EGraph graph);
 
 	/**
 	 * Gets the list of operational rules.
@@ -87,13 +60,6 @@ public interface TggTransformation {
 	 * @param emfEngine the emfEngine to set
 	 */
 	public abstract void setEmfEngine(TggEngineImpl emfEngine);
-
-	/**
-	 * Gets the translation maps.
-	 *
-	 * @return the translation maps
-	 */
-	public abstract TranslationMaps getTranslationMaps();
 
 	/**
 	 * Sets the translation maps.
@@ -155,14 +121,7 @@ public interface TggTransformation {
 	 */
 	public abstract boolean applyRules(IProgressMonitor monitor, String msg);
 
-	/**
-	 * Fills the maps with Boolean translation markers initially with the value of markerValue for each input e object.
-	 *
-	 * @param eObjects the e objects to be marked
-	 */
-	public abstract void fillTranslatedMaps(List<EObject> eObjects, Boolean markerValue);
-
-	public abstract void fillTranslatedMaps(EObject eObject, Boolean markerValue);
+	
 
 	/**
 	 * Sets the flag, whether parameters can be matched to null values on attributes.

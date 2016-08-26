@@ -29,15 +29,16 @@ import org.eclipse.emf.henshin.model.Node;
 
 import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.TggTransformation;
+import de.tub.tfs.henshin.tgg.interpreter.TggTransformationInfo;
 
 public class ObjectCopier {
 
 	private EGraph graph;
 	private Engine engine;
-	private TggTransformation trafo=null;
+	private TggTransformationInfo trafo=null;
 	private boolean handleMarkers=false;
 
-	public ObjectCopier(EGraph graph,TggTransformation trafo, Engine e) //Engine e,HashMap<Node, Boolean> isTranslatedMap,		HashMap<Attribute, Boolean> isTranslatedAttributeMap,			HashMap<Edge, Boolean> isTranslatedEdgeMap)
+	public ObjectCopier(EGraph graph,TggTransformationInfo trafo, Engine e) //Engine e,HashMap<Node, Boolean> isTranslatedMap,		HashMap<Attribute, Boolean> isTranslatedAttributeMap,			HashMap<Edge, Boolean> isTranslatedEdgeMap)
 	{
 		assert(trafo != null):"Object copier is called with transformation, but it is not set.";
 		this.graph = graph;

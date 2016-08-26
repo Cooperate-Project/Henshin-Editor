@@ -19,6 +19,7 @@ import org.eclipse.emf.henshin.model.Rule;
 
 import de.tub.tfs.henshin.tgg.interpreter.TggEngine;
 import de.tub.tfs.henshin.tgg.interpreter.TggTransformation;
+import de.tub.tfs.henshin.tgg.interpreter.TggTransformationInfo;
 
 public class TggEngineImpl extends EngineImpl implements TggEngine {
 	
@@ -38,7 +39,7 @@ public class TggEngineImpl extends EngineImpl implements TggEngine {
 	
 	protected ObjectCopier copier;
 	
-	protected TggTransformation trafo;
+	protected TggTransformationInfo trafoInfo;
 
 	public TggEngineImpl(EGraph graph) {
 		this(graph,null);
@@ -47,14 +48,14 @@ public class TggEngineImpl extends EngineImpl implements TggEngine {
 	/**
 	 * @param executeFTRulesCommand
 	 */
-	public TggEngineImpl(EGraph graph,TggTransformation trafo) {
+	public TggEngineImpl(EGraph graph, TggTransformationInfo trafoInfo) {
 		// super(); // FIXME: why is this not called?
-		this.trafo = trafo;
-		if(trafo!=null)
-			this.copier = new ObjectCopier(graph,trafo,this);
+		this.trafoInfo = trafoInfo;
+		if(trafoInfo!=null)
+			this.copier = new ObjectCopier(graph, trafoInfo, this);
 		else 
 			this.copier = new ObjectCopier(graph,this);
-		this.getScriptEngine().put("ObjectCopier",copier );
+		this.getScriptEngine().put("ObjectCopier", copier );
 		this.getOptions().put(OPTION_SORT_VARIABLES, false);
 		this.sortVariables = false;
 		this.inverseMatchingOrder = invertMatchingOrder;
