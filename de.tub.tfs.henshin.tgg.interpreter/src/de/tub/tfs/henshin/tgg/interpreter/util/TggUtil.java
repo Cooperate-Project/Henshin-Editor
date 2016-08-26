@@ -13,6 +13,8 @@ package de.tub.tfs.henshin.tgg.interpreter.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -185,8 +187,21 @@ public class TggUtil {
 
 
 	// set the marker of elem
-	public static void setElemMarker(ModelElement elem, String marker) {
+	public static void setElemMarker(final ModelElement elem, String marker) {
 		putElemTggAnnotation(elem, MARKER_ANNOTATION_POS, MARKER_KEY, marker);
+		elem.eNotify(new NotificationImpl(Notification.SET, null,
+				marker)
+				{
+
+					@Override
+					public Object getNotifier() {
+						// TODO Auto-generated method stub
+						return elem;
+					}
+			
+				}
+				
+				);
 	}
 
 	// retrieve the component of elem
