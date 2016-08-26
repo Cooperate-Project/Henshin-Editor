@@ -140,7 +140,7 @@ public abstract class ProcessRuleCommand extends Command {
 		newRule.setName(prefix + oldRule.getName());
 		
 
-		TggUtil.setElemMarker(newRule, RuleUtil.TGG_RULE);
+		TggUtil.setElemMarker(newRule, getRuleMarker());
 		//((TGGRule) newRule).setMarkerType(getRuleMarker());
 		//TggUtil.addElemAnnotation(newRule, RuleUtil.IS_MARKER, "true");
 		//((TGGRule) newRule).setIsMarked(true);

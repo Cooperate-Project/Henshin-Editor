@@ -46,9 +46,8 @@ public class DeleteImportedModellCommand extends Command {
 	
 	@Override
 	public void execute() {
-		
+		//TODO: Remove annotations on module for this package
 		tgg.getImportedPkgs().remove(impPackage);
-		
 		module.getImports().remove(ePackage);
 		
 	}

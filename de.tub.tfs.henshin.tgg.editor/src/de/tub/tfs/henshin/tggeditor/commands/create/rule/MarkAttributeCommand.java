@@ -10,6 +10,8 @@
  *******************************************************************************/
 package de.tub.tfs.henshin.tggeditor.commands.create.rule;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.Graph;
 import org.eclipse.emf.henshin.model.HenshinFactory;
@@ -17,6 +19,7 @@ import org.eclipse.emf.henshin.model.Mapping;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.gef.commands.CompoundCommand;
+
 import de.tub.tfs.henshin.tgg.TAttribute;
 import de.tub.tfs.henshin.tgg.TGG;
 import de.tub.tfs.henshin.tgg.TggFactory;
@@ -71,16 +74,14 @@ public class MarkAttributeCommand extends CompoundCommand {
 			lhsAttribute.setValue(rhsAttribute.getValue());
 			// remove marker
 			TggUtil.setElemMarker(rhsAttribute, null);
-			//((TAttribute) rhsAttribute).setMarkerType(null);
 			
 		} 
 		else {
 			// attribute is currently not marked, thus mark it 
 			TggUtil.setElemMarker(rhsAttribute, RuleUtil.NEW);
-			//((TAttribute) rhsAttribute).setMarkerType(RuleUtil.NEW);
 			// delete lhs attribute
 			Attribute lhsAttribute = RuleUtil.getLHSAttribute(rhsAttribute);
-			if(lhsAttribute!=null){
+			if(lhsAttribute != null){
 				add(new SimpleDeleteEObjectCommand(lhsAttribute));
 			super.execute();
 			}
