@@ -25,12 +25,15 @@ import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.henshin.interpreter.impl.EGraphImpl;
 import org.eclipse.emf.henshin.model.Attribute;
 import org.eclipse.emf.henshin.model.Edge;
 import org.eclipse.emf.henshin.model.Graph;
 import org.eclipse.emf.henshin.model.Node;
+import org.w3c.dom.Attr;
 
 import de.tub.tfs.henshin.tgg.TggFactory;
 
@@ -84,6 +87,7 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 
 		for (Node node : henshinGraph.getNodes()) {
 			EObject eObject = node2object.get(node);
+			
 			try {
 				if (eObject == null) {
 					EClass nodeType = node.getType();
@@ -105,6 +109,12 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 					EAttribute attrType = attr.getType();
 					String attrValue = attr.getValue();
 					attrValue = attrValue.replaceAll("\"", "");
+					
+					if(attrType.eIsProxy()) {
+						LOG.error("Type for attribute ist a proxy skipping: " + attrType.toString());
+						continue;
+					}
+
 
 					if (attrType.isMany()) {
 						List<Object> attrValues = (List<Object>) eObject.eGet(attrType);
@@ -115,6 +125,7 @@ public class TggHenshinEGraph  extends EGraphImpl implements Adapter {
 						}
 					} else {
 						try {
+							
 							eObject.eSet(attrType,
 									EcoreUtil.createFromString(attrType.getEAttributeType(), attrValue));
 						} catch (IllegalArgumentException ex){
