@@ -11,9 +11,10 @@
 package de.tub.tfs.henshin.tggeditor.commands.create.rule;
 
 import org.eclipse.emf.henshin.model.IndependentUnit;
+import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.TNode;
+
 import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tggeditor.commands.delete.rule.DeleteOpRuleCommand;
@@ -53,7 +54,7 @@ public class GenerateCCRuleCommand extends GenerateOpRuleCommand {
 	}
 
 	@Override
-	protected boolean filterNode(TNode node) {
+	protected boolean filterNode(Node node) {
 		return true; // all triple components are handled
 	}
 }
