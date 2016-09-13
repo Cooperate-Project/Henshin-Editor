@@ -425,7 +425,7 @@ public class ImportInstanceModelAction extends SelectionAction {
 			node = TggFactory.eINSTANCE.createTNode();
 			node.setType(ref.eClass());
 			node.setName("");
-			instanceGraphToHenshinGraphMapping.put(eObj, node);
+			instanceGraphToHenshinGraphMapping.put(ref, node);
 			graph.getNodes().add(node);
 			map.put(ref, node);
 		}
