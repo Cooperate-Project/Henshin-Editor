@@ -10,6 +10,8 @@
  *******************************************************************************/
 package de.tub.tfs.henshin.tggeditor.commands.create.rule;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.henshin.model.Edge;
 import org.eclipse.emf.henshin.model.IndependentUnit;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
@@ -17,6 +19,8 @@ import org.eclipse.emf.henshin.model.Rule;
 
 import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
+import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
+import de.tub.tfs.henshin.tggeditor.commands.create.rule.GenerateOpRuleCommand.OpRuleEdgeProcessor;
 import de.tub.tfs.henshin.tggeditor.commands.delete.rule.DeleteOpRuleCommand;
 
 public class GenerateCCRuleCommand extends GenerateOpRuleCommand {
@@ -40,11 +44,32 @@ public class GenerateCCRuleCommand extends GenerateOpRuleCommand {
 		deleteCommand.execute();
 	}
 
+	
 	@Override
 	protected void addNodeProcessors(){
 		// process all nodes in all three components
 		nodeProcessors.put(TripleComponent.SOURCE, new OpRuleNodeProcessor());
-		nodeProcessors.put(TripleComponent.CORRESPONDENCE, new OpRuleNodeProcessor());
+		nodeProcessors.put(TripleComponent.CORRESPONDENCE, new OpRuleNodeProcessor(){
+
+			@Override
+			public boolean filter(Node oldNode, Node newNode) {
+				
+				
+				if(!RuleUtil.NEW.equals(TggUtil.getElemMarker(oldNode))) {
+				EList<Edge> incoming = oldNode.getIncoming();
+				boolean isConstantTrace = true;
+				for(Edge e : incoming) {
+					if(!hasExistingTraceAsTarget(e))
+						isConstantTrace = false;
+				}
+				if(isConstantTrace)
+					return false;
+					
+				}
+				return super.filter(oldNode, newNode);
+			}
+			
+		});
 		nodeProcessors.put(TripleComponent.TARGET, new OpRuleNodeProcessor());
 	};
 
