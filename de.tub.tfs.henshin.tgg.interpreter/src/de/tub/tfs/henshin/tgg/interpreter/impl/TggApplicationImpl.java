@@ -96,8 +96,6 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 		appliedRules.clear();
 		
 		return doExecute(monitor);
-
-//		return false;
 	}
 
 	@Override
@@ -178,6 +176,7 @@ public class TggApplicationImpl extends AbstractApplicationImpl {
 							// refresh rule application to be used for layout
 							// and debugging
 							// create new rule application for each match
+							LOG.debug("~");
 							RuleApplicationImpl ruleApplication = new RuleApplicationImpl(engine);
 							ruleApplication.setEGraph(graph);
 							ruleApplication.setRule(rule);

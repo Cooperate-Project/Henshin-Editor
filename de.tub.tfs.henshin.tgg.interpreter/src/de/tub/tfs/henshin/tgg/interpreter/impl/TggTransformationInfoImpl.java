@@ -75,7 +75,7 @@ public class TggTransformationInfoImpl implements TggTransformationInfo {
 	 * flag, whether attribute values can be matched to null values
 	 */
 	public Boolean getNullValueMatching() {
-		return Boolean.FALSE; //TODO: return from module annotation
+		return Boolean.TRUE; //TODO: return from module annotation
 	}
 	
 	public void updateTranslatedAttributeMap(Node ruleNodeRHS, EObject graphNodeEObject) {
