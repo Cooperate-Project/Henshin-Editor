@@ -14,14 +14,13 @@ import org.eclipse.emf.henshin.model.IndependentUnit;
 import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.TNode;
-import de.tub.tfs.henshin.tgg.TRule;
+
+
 import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
-import de.tub.tfs.henshin.tggeditor.commands.create.rule.GenerateOpRuleCommand.OpRuleNodeProcessor;
 import de.tub.tfs.henshin.tggeditor.commands.delete.rule.DeleteOpRuleCommand;
-import de.tub.tfs.henshin.tggeditor.util.GraphicalRuleUtil;
+
 //NEW GERARD
 public class GenerateITRuleCommand extends GenerateOpRuleCommand {
 
@@ -62,7 +61,7 @@ public class GenerateITRuleCommand extends GenerateOpRuleCommand {
 	}
 	
 	@Override
-	protected boolean filterNode(TNode node) {
+	protected boolean filterNode(Node node) {
 		return NodeUtil.isSourceNode(node) || NodeUtil.isTargetNode(node);
 	}
 }

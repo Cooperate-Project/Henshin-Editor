@@ -11,9 +11,9 @@
 package de.tub.tfs.henshin.tggeditor.commands.create.rule;
 
 import org.eclipse.emf.henshin.model.IndependentUnit;
+import org.eclipse.emf.henshin.model.Node;
 import org.eclipse.emf.henshin.model.Rule;
 
-import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.util.NodeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
@@ -51,7 +51,7 @@ public class GenerateBTRuleCommand extends GenerateOpRuleCommand {
 		return RuleUtil.TGG_BT_RULE;
 	}
 	@Override
-	protected boolean filterNode(TNode node) {
+	protected boolean filterNode(Node node) {
 		return NodeUtil.isTargetNode(node);
 	}
 }

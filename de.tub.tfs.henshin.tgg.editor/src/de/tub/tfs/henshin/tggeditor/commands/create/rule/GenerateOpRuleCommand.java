@@ -26,10 +26,7 @@ import org.eclipse.emf.henshin.model.Parameter;
 import org.eclipse.emf.henshin.model.Rule;
 import org.eclipse.emf.henshin.model.Unit;
 
-import de.tub.tfs.henshin.tgg.TAttribute;
-import de.tub.tfs.henshin.tgg.TEdge;
 import de.tub.tfs.henshin.tgg.TGGRule;
-import de.tub.tfs.henshin.tgg.TNode;
 import de.tub.tfs.henshin.tggeditor.util.AttributeUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
@@ -46,7 +43,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		this(rule,null);		
 	}
 	
-	protected abstract boolean filterNode(TNode node);
+	protected abstract boolean filterNode(Node node);
 	
 	protected class OpRuleNodeProcessor implements NodeProcessor{
 		private static final String REF_PREFIX = "ref";
@@ -67,13 +64,13 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 				setMapping(tNodeLHS, ruleTNode);
 
 				// update all markers for the attributes
-				TAttribute newAttLHS = null;
-				TAttribute newAttRHS = null;
+				Attribute newAttLHS = null;
+				Attribute newAttRHS = null;
 				for (Attribute oldAttribute : oldNodeRHS.getAttributes()) {
 
-					newAttRHS = (TAttribute) getCopiedObject(oldAttribute);
+					newAttRHS = (Attribute) getCopiedObject(oldAttribute);
 					if (RuleUtil.NEW.equals(TggUtil.getElemMarker(newAttRHS))){
-						newAttLHS = (TAttribute) copyAtt(oldAttribute, tNodeLHS);
+						newAttLHS = (Attribute) copyAtt(oldAttribute, tNodeLHS);
 						AttributeUtil.setAttributeMarker(newAttRHS, RuleUtil.Translated);
 						// marker needed for matching constraint
 						AttributeUtil.setAttributeMarker(newAttLHS, RuleUtil.Not_Translated_Graph);
@@ -91,10 +88,10 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 			} else {
 				// case: node is not created, i.e., in LHS or in NAC
 				// set marker that it has to be translated already
-				TAttribute tAttributeRHS = null;
-				TAttribute tAttributeLHS = null;
+				Attribute tAttributeRHS = null;
+				Attribute tAttributeLHS = null;
 				
-				TNode tNodeLHS = (TNode) RuleUtil.getLHSNode(ruleTNode);
+				Node tNodeLHS = RuleUtil.getLHSNode(ruleTNode);
 				// case: node is in NAC
 				if (tNodeLHS == null) {
 					if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(oldNodeRHS))){
@@ -104,8 +101,8 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 						setNodeMarker(ruleTNode, RuleUtil.Translated_Graph);				
 					}
 						for (Attribute attr : oldNodeRHS.getAttributes()) {
-							tAttributeRHS = (TAttribute) getCopiedObject(attr);
-							tAttributeLHS = (TAttribute) RuleUtil.getLHSAttribute(tAttributeRHS);
+							tAttributeRHS = (Attribute) getCopiedObject(attr);
+							tAttributeLHS = (Attribute) RuleUtil.getLHSAttribute(tAttributeRHS);
 							// case: attribute in NAC has marker "unspecified"
 							if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(tAttributeRHS))){
 								AttributeUtil.setAttributeMarker(tAttributeRHS,
@@ -127,13 +124,13 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 				 setNodeMarker(ruleTNode, RuleUtil.Translated_Graph);
 				 setNodeMarker(tNodeLHS, RuleUtil.Translated_Graph);
 				
-				TAttribute newAttLHS = null;
+				Attribute newAttLHS = null;
 
 				for (Attribute attr : oldNodeRHS.getAttributes()) {
-					tAttributeRHS = (TAttribute) getCopiedObject(attr);
+					tAttributeRHS = (Attribute) getCopiedObject(attr);
 					// case: attribute is created by the TGG rule
 					if (RuleUtil.NEW.equals(TggUtil.getElemMarker(attr))){
-						newAttLHS = (TAttribute) copyAtt(attr, RuleUtil.getLHSNode((Node) tAttributeRHS.eContainer()));
+						newAttLHS = copyAtt(attr, RuleUtil.getLHSNode((Node) tAttributeRHS.eContainer()));
 						AttributeUtil.setAttributeMarker(tAttributeRHS, RuleUtil.Translated);
 						// marker needed for matching constraint
 						AttributeUtil.setAttributeMarker(newAttLHS, RuleUtil.Not_Translated_Graph);
@@ -144,7 +141,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 					// case: attribute is not created by the TGG rule
 					else{
 						// set marker that it has to be translated already
-						tAttributeLHS = (TAttribute) RuleUtil.getLHSAttribute(tAttributeRHS);
+						tAttributeLHS = RuleUtil.getLHSAttribute(tAttributeRHS);
 						AttributeUtil.setAttributeMarker(tAttributeRHS, RuleUtil.Translated_Graph);							
 						AttributeUtil.setAttributeMarker(tAttributeLHS, RuleUtil.Translated_Graph);							
 					}
@@ -155,7 +152,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		}
 
 		private void setValueOfMarkedAttributeInPreservedNode(Node newNode,
-				Attribute oldAttribute, TAttribute tAttributeRHS, TAttribute newAttLHS) {
+				Attribute oldAttribute, Attribute tAttributeRHS, Attribute newAttLHS) {
 			final LinkedHashSet<String> usedVars = new LinkedHashSet<String>();
 			final LinkedHashSet<String> definedVars = new LinkedHashSet<String>();
 
@@ -190,7 +187,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		}
 
 		private void setValueOfMarkedAttribute(Node newNode,
-				TAttribute newAttLHS, TAttribute newAttRHS,
+				Attribute newAttLHS, Attribute newAttRHS,
 				Attribute oldAttribute) {
 			// case: node has name identifier - then replace attribute value by parameter
 			if (newNode.getName() != null && !newNode.getName().isEmpty() && newNode.getName().startsWith(REF_PREFIX) && (newNode.getName().charAt(0) < '0' || newNode.getName().charAt(0) > '9')){
@@ -215,7 +212,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		}
 
 		private void convertAttExpressionToAttCondition(Node newNode,
-				String oldAttValue, Attribute newAttLHS, TAttribute newAttRHS) {
+				String oldAttValue, Attribute newAttLHS, Attribute newAttRHS) {
 			// replace attribute value by new parameter 
 			String parameter = getFreshParameterName("in_"+newAttRHS.getType().getName(),newNode.getGraph().getRule()); 
 			Parameter p = HenshinFactory.eINSTANCE.createParameter(parameter);
@@ -230,7 +227,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		}
 
 		private void replaceAttributeValueByStructuredName(Node newNode,
-				TAttribute newAttLHS, TAttribute newAttRHS) {
+				Attribute newAttLHS, Attribute newAttRHS) {
 			String parameter = newNode.getName() + "_" + newAttLHS.getType().getName();
 			newAttLHS.setValue(parameter);
 			newAttRHS.setValue(parameter);
@@ -265,7 +262,6 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		
 		@Override
 		public void process(Edge oldEdge, Edge newEdge) {
-			TEdge newTEdge = (TEdge) newEdge;
 		
 			// case: edge is marked to be created by the TGG rule, thus it
 			// shall be translated by the FT rule
@@ -290,14 +286,14 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 			// case: edge is not created by the TGG rule
 			else {
 				// case: edge is in NAC and has an unspecified marker
-				if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(newTEdge))) //TODO: This is useless
-					TggUtil.setElemMarker(newTEdge, RuleUtil.TR_UNSPECIFIED);
+				if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(newEdge))) //TODO: This is useless
+					TggUtil.setElemMarker(newEdge, RuleUtil.TR_UNSPECIFIED);
 				else {
 					// mark the edge to be translated already
 					setEdgeMarker(newEdge, RuleUtil.Translated_Graph);
 
 					// handle LHS edge
-					TEdge tEdgeLHS = (TEdge) RuleUtil.getLHSEdge(newEdge);
+					Edge tEdgeLHS = RuleUtil.getLHSEdge(newEdge);
 					if (tEdgeLHS != null)
 						// case: edge is in RHS graph
 						setEdgeMarker(tEdgeLHS, RuleUtil.Translated_Graph);
@@ -308,7 +304,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		
 		@Override
 		public boolean filter(Edge oldEdge) {
-			return filterNode((TNode)oldEdge.getSource()) && filterNode((TNode)oldEdge.getTarget());
+			return filterNode(oldEdge.getSource()) && filterNode(oldEdge.getTarget());
 		}
 		
 	}
@@ -332,8 +328,12 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		}
 		
 		addNodeProcessors();
-		edgeProcessors.add(new OpRuleEdgeProcessor());
+		addEdgeProcessors();
 		
+	}
+
+	protected void addEdgeProcessors() {
+		edgeProcessors.add(new OpRuleEdgeProcessor());
 	}
 	
 	protected abstract void addNodeProcessors();
