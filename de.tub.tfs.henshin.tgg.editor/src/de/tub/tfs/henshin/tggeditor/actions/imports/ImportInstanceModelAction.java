@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.DynamicEObjectImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 import org.eclipse.emf.henshin.model.Attribute;
@@ -156,6 +157,7 @@ public class ImportInstanceModelAction extends SelectionAction {
 				}
 				
 			}
+			EcoreUtil.resolveAll(r);
 			createAndAddGraph(r,uri);
 			
 			System.out
@@ -422,7 +424,8 @@ public class ImportInstanceModelAction extends SelectionAction {
 		if (node == null){
 			node = TggFactory.eINSTANCE.createTNode();
 			node.setType(ref.eClass());
-			node.setName(ref.toString());
+			node.setName("");
+			instanceGraphToHenshinGraphMapping.put(ref, node);
 			graph.getNodes().add(node);
 			map.put(ref, node);
 		}

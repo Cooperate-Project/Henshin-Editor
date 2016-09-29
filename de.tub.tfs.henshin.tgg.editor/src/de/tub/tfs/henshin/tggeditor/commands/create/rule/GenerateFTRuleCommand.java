@@ -79,7 +79,7 @@ public class GenerateFTRuleCommand extends GenerateOpRuleCommand {
 					setEdgeMarker(tEdgeLHS, null);
 						
 				}
-				else
+				else if (!hasExistingTraceAsTarget(oldEdge))
 					super.process(oldEdge, newEdge);
 			}
 			
@@ -95,16 +95,8 @@ public class GenerateFTRuleCommand extends GenerateOpRuleCommand {
 				return allSource || isTraceToExistingCorr;
 			}
 		});
-		super.addEdgeProcessors();
 	}
 	
-	private static boolean hasExistingTraceAsTarget(Edge oldEdge) {
-		return TripleComponent.CORRESPONDENCE.equals(
-				TggUtil.getElemComponent(oldEdge.getTarget()))
-				 && !RuleUtil.NEW.equals(TggUtil.getElemMarker(oldEdge.getTarget()));
-	}
-
-
 	@Override
 	protected String getRuleMarker() {
 		return RuleUtil.TGG_FT_RULE;

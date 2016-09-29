@@ -28,13 +28,16 @@ import org.eclipse.emf.henshin.model.Unit;
 
 import de.tub.tfs.henshin.tgg.TGGRule;
 import de.tub.tfs.henshin.tggeditor.util.AttributeUtil;
+import de.tub.tfs.henshin.tgg.interpreter.TripleComponent;
 import de.tub.tfs.henshin.tgg.interpreter.util.RuleUtil;
 import de.tub.tfs.henshin.tgg.interpreter.util.TggUtil;
-import de.tub.tfs.henshin.tggeditor.util.AttributeUtil;
+
 
 public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 
 	private static final String RULE_FOLDER = "RuleFolder";
+	
+
 	protected String OP_RULE_CONTAINER_PREFIX = "OPRule_";
 	protected String OP_RULE_FOLDER = "OPRuleFolder";
 	protected String OP_RULES_PNG = "OPRules.png";
@@ -43,6 +46,12 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 		this(rule,null);		
 	}
 	
+	protected static boolean hasExistingTraceAsTarget(Edge oldEdge) {
+		return TripleComponent.CORRESPONDENCE.equals(
+				TggUtil.getElemComponent(oldEdge.getTarget()))
+				&& !RuleUtil.NEW.equals(TggUtil.getElemMarker(oldEdge.getTarget()));
+	}
+
 	protected abstract boolean filterNode(Node node);
 	
 	protected class OpRuleNodeProcessor implements NodeProcessor{
@@ -286,7 +295,7 @@ public abstract class GenerateOpRuleCommand extends ProcessRuleCommand {
 			// case: edge is not created by the TGG rule
 			else {
 				// case: edge is in NAC and has an unspecified marker
-				if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(newEdge))) //TODO: This is useless
+				if (RuleUtil.TR_UNSPECIFIED.equals(TggUtil.getElemMarker(oldEdge))) //TODO: This is useless
 					TggUtil.setElemMarker(newEdge, RuleUtil.TR_UNSPECIFIED);
 				else {
 					// mark the edge to be translated already
